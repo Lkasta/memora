@@ -1,9 +1,9 @@
-import { Stories } from "@/components/Stories/Stories";
+import { EmptyHome } from "@/components/EmptyHome";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-items-center gap-16 p-8">
-      <Stories />
+    <div className="bg-background flex h-screen w-full items-center justify-center p-8">
+      <EmptyHome />
     </div>
   );
 }
