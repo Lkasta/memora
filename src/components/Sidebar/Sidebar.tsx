@@ -19,12 +19,13 @@ export function Sidebar() {
 
     fetchMemories();
   }, []);
+
   return (
-    <div className="min-h-screen w-full max-w-72 border-r">
+    <div className="flex h-screen w-full max-w-72 flex-col border-r">
       <div className="px-6 py-3 text-2xl font-bold text-gray-800">
         <span className="text-violet-500">me</span>mora
       </div>
-      <div className="overflow-y-auto">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         <span className="px-6 text-xs font-bold text-gray-300">
           Dezembro 25
         </span>
