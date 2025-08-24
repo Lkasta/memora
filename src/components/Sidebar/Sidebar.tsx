@@ -34,6 +34,7 @@ export function Sidebar() {
             return (
               <MemorieItemSidebar
                 key={memorie.id}
+                id={memorie.id}
                 title={memorie.title}
                 content={memorie.content}
                 event_date={memorie.event_date}

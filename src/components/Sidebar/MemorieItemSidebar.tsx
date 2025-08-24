@@ -1,15 +1,23 @@
 import { MemorieType } from "@/types/Memorie";
 import { formatMemorieDate } from "@/utils/dates";
+import Link from "next/link";
 
-type MemorieSidebarType = Pick<MemorieType, "title" | "content" | "event_date">;
+type MemorieSidebarType = Pick<
+  MemorieType,
+  "title" | "content" | "event_date" | "id"
+>;
 
 export function MemorieItemSidebar({
+  id,
   title,
   event_date,
   content,
 }: MemorieSidebarType) {
   return (
-    <div className="flex cursor-pointer items-center gap-3 border-b px-6 py-1.5 transition-all hover:bg-gray-100">
+    <Link
+      href={`/memory/${id}`}
+      className="flex cursor-pointer items-center gap-3 border-b px-6 py-1.5 transition-all hover:bg-gray-100"
+    >
       <div className="!h-10 !w-10 rounded-lg bg-gray-300" />
       <div className="flex min-w-0 flex-1 flex-col select-none">
         <div className="flex gap-1">
@@ -20,6 +28,6 @@ export function MemorieItemSidebar({
         </div>
         <p className="truncate text-xs text-gray-500">{content}</p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -16,3 +16,11 @@ export function formatMemorieDate(date: Date) {
   }
   return `${capitalizeDay(format(date, "EEEE", { locale: ptBR }))}, ${format(date, "d")}`;
 }
+
+export function formatMemorieDateDetailed(date: Date) {
+  let weekDay = format(date, "EEE", { locale: ptBR });
+  weekDay = weekDay.replace(".", "");
+  weekDay = weekDay[0].toUpperCase() + weekDay.slice(1);
+
+  return `${format(date, "dd/MM/yyyy")} - ${weekDay.slice(0, 3)} ${format(date, "HH'h'mm")}`;
+}
