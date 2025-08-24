@@ -2,14 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/lib/api";
-
-type MemorieType = {
-  id: number;
-  title: string;
-  content: string;
-  user_id: number;
-  event_date: Date;
-};
+import { MemorieType } from "@/types/Memorie";
 
 export function Stories() {
   const [memories, setMemories] = useState<MemorieType[]>([]);
