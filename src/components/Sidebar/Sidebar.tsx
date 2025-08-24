@@ -2,7 +2,7 @@
 import api from "@/lib/api";
 import { MemorieType } from "@/types/Memorie";
 import { useEffect, useState } from "react";
-import { MemorieSidebar } from "./MemorieSidebar";
+import { MemorieItemSidebar } from "./MemorieItemSidebar";
 
 export function Sidebar() {
   const [memories, setMemories] = useState<MemorieType[]>([]);
@@ -32,7 +32,7 @@ export function Sidebar() {
         <div className="flex w-full flex-col">
           {memories.map((memorie) => {
             return (
-              <MemorieSidebar
+              <MemorieItemSidebar
                 key={memorie.id}
                 title={memorie.title}
                 content={memorie.content}
