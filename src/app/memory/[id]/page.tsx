@@ -1,5 +1,6 @@
 "use client";
 
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import api from "@/lib/api";
 import { MemorieType } from "@/types/Memorie";
 import { formatMemorieDateDetailed } from "@/utils/dates";
@@ -28,8 +29,9 @@ export default function Memory({ params }: MemoriePageProps) {
   }, [id]);
 
   return (
-    <div className="flex w-full flex-col text-gray-800">
-      <div className="grid h-[60px] grid-cols-3 items-center border-b px-6 py-3">
+    <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col text-gray-800">
+      {/* Cabeçalho fixo */}
+      <div className="grid h-[60px] flex-shrink-0 grid-cols-3 items-center border-b px-6 py-3">
         <div className="flex items-center gap-2 text-gray-700">
           <ChevronLeft size={16} />
           <h1 className="text-sm font-bold">{memorie?.title}</h1>
@@ -38,9 +40,9 @@ export default function Memory({ params }: MemoriePageProps) {
           {formatMemorieDateDetailed(memorie?.event_date || new Date())}
         </h1>
       </div>
-      <div className="px-12 py-6">
-        <h1 className="text-[32px] font-bold">{memorie?.title}</h1>
-        <p>{memorie?.content}</p>
+
+      <div className="flex-1 w-full overflow-y-auto">
+        <SimpleEditor content="Jonas" />
       </div>
     </div>
   );
