@@ -13,6 +13,7 @@ import { Highlight } from "@tiptap/extension-highlight";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Selection } from "@tiptap/extensions";
+import { Placeholder } from "@tiptap/extension-placeholder";
 
 // --- UI Primitives ---
 import { Button } from "@/components/tiptap-ui-primitive/button";
@@ -65,8 +66,10 @@ import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
 interface SimpleEditorProps {
+  title?: string;
   content?: string;
-  onContentChange?: (content: string) => void;
+  onTitleChange?: (title: string) => void;
+  onContentChange?: (content: string, title: string) => void;
 }
 
 const MainToolbarContent = ({
@@ -143,13 +146,16 @@ const MobileToolbarContent = ({
 );
 
 export function SimpleEditor({
+  title = "",
   content = "",
+  onTitleChange,
   onContentChange,
 }: SimpleEditorProps) {
   const isMobile = useIsMobile();
   const [mobileView, setMobileView] = React.useState<
     "main" | "highlighter" | "link"
   >("main");
+  const [currentTitle, setCurrentTitle] = React.useState<string>(title);
   const toolbarRef = React.useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
@@ -167,10 +173,16 @@ export function SimpleEditor({
     extensions: [
       StarterKit.configure({
         horizontalRule: false,
+        heading: {
+          levels: [2, 3, 4], // Remove h1 do editor já que será separado
+        },
         link: {
           openOnClick: false,
           enableClickSelection: true,
         },
+      }),
+      Placeholder.configure({
+        placeholder: "Escreva algo aqui...",
       }),
       HorizontalRule,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -187,24 +199,45 @@ export function SimpleEditor({
         maxSize: MAX_FILE_SIZE,
         limit: 3,
         upload: handleImageUpload,
-        onError: (error) => console.error("Upload failed:", error),
+        onError: (error: Error) => console.error("Upload failed:", error),
       }),
     ],
-    content: content || "", 
+    content: content || "",
     onUpdate: ({ editor }) => {
       if (onContentChange) {
         const html = editor.getHTML();
-        onContentChange(html);
+        onContentChange(html, currentTitle);
       }
     },
   });
 
-   React.useEffect(() => {
+  // Função para lidar com mudanças no título
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = event.target.value;
+    setCurrentTitle(newTitle);
+    if (onTitleChange) {
+      onTitleChange(newTitle);
+    }
+    if (onContentChange) {
+      const html = editor?.getHTML() || "";
+      onContentChange(html, newTitle);
+    }
+  };
+
+  // Sincroniza o conteúdo quando a prop content mudar
+  React.useEffect(() => {
     if (editor && content !== editor.getHTML()) {
       editor.commands.setContent(content);
     }
   }, [content, editor]);
 
+  // Sincroniza o título quando a prop title mudar
+  React.useEffect(() => {
+    if (title !== currentTitle) {
+      setCurrentTitle(title);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title]);
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
       setMobileView("main");
@@ -228,6 +261,21 @@ export function SimpleEditor({
             />
           )}
         </Toolbar>
+
+        {/* Campo de título separado - sempre H1 */}
+        <div className="px-12 pt-6 pb-2">
+          <input
+            type="text"
+            value={currentTitle}
+            onChange={handleTitleChange}
+            placeholder="Digite o título aqui..."
+            className="w-full text-3xl font-bold text-gray-900 bg-transparent border-none outline-none resize-none placeholder-gray-400"
+            style={{
+              fontFamily: 'inherit',
+              lineHeight: '1.2',
+            }}
+          />
+        </div>
 
         <EditorContent
           editor={editor}

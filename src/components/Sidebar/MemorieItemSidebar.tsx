@@ -26,7 +26,9 @@ export function MemorieItemSidebar({
             • {formatMemorieDate(event_date)}
           </p>
         </div>
-        <p className="truncate text-xs text-gray-500">{content}</p>
+        <p className="truncate text-xs text-gray-500">
+          {content.replace(/<[^>]+>/g, "").slice(0, 40)}
+        </p>
       </div>
     </Link>
   );
