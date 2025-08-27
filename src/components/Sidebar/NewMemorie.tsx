@@ -1,50 +1,41 @@
-"use client";
-
-import api from "@/lib/api";
-
 import { Loader, PlusIcon } from "lucide-react";
 import { Button } from "../ui/button";
-import { useCallback, useState } from "react";
 import { getDateWithTimezone } from "@/utils/dates";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useCreateMemorie } from "@/service/memories/memories.hook";
 
 export function NewMemorie() {
-  const [isLoading, setIsLoading] = useState(false);
+  const createMemorie = useCreateMemorie();
   const router = useRouter();
 
-  const createMemory = useCallback(async () => {
+  async function handleCreate() {
     try {
-      setIsLoading(true);
-
       const now = format(
         getDateWithTimezone(new Date()),
         "yyyy-MM-dd HH:mm:ss",
       );
 
-      const response = await api.post("/memories", {
-        title: "Nova Memória",
-        content: "Escreva aqui...",
-        event_date: now,
+      await createMemorie.mutateAsync({
+        title: "Minha memória",
+        content: "Conteúdo da memória",
+        event_date: new Date(now),
         user_id: 1,
       });
 
-      const memoryId = response.data.id;
-      router.push(`/memory/${memoryId}`);
+      router.push("/");
     } catch (err) {
-      console.error("Erro ao criar memória:", err);
-    } finally {
-      setIsLoading(false);
+      console.log("Erro ao criar memória:", err);
     }
-  }, [router]);
+  }
 
   return (
     <Button
-      disabled={isLoading}
-      onClick={createMemory}
+      disabled={createMemorie.isPending}
+      onClick={handleCreate}
       className="w-full cursor-pointer bg-violet-500 text-white !transition-all"
     >
-      {isLoading ? (
+      {createMemorie.isPending ? (
         <Loader className="animate-spin" />
       ) : (
         <div className="flex items-center gap-1">

@@ -19,7 +19,10 @@ export function Sidebar() {
 
   return (
     <div className="flex h-screen w-full max-w-72 flex-col border-r">
-      <Link href="/" className="px-6 py-3 text-2xl font-bold text-gray-800">
+      <Link
+        href="/"
+        className="px-6 py-3 text-2xl font-bold text-gray-800 select-none"
+      >
         <span className="text-violet-500">me</span>mora
       </Link>
       <div className="px-6 py-3">
