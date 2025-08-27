@@ -1,11 +1,9 @@
 "use client";
 
-import api from "@/lib/api";
-
-import { useEffect, useState, use, useCallback } from "react";
+import { useEffect, useState, useCallback, use } from "react";
 
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { MemorieType } from "@/types/Memorie";
+import { useMemorie, useUpdateMemorie } from "@/service/memories/memories.hook";
 import { MemoryHeader } from "../components/MemoryHeader";
 
 interface MemoriePageProps {
@@ -14,78 +12,47 @@ interface MemoriePageProps {
 
 export default function Memory({ params }: MemoriePageProps) {
   const { id } = use(params);
-  const [memorie, setMemorie] = useState<MemorieType>();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    async function fetchMemories() {
-      try {
-        setIsLoading(true);
-        const { data } = await api.get(`/memories/${id}`);
-        setMemorie(data);
+  const updateMemorie = useUpdateMemorie();
+  const { data: memorie, isLoading } = useMemorie(Number(id));
 
-        setTitle(data.title || "");
-        setContent(data.content || "");
-      } catch (error) {
-        console.error("Erro ao buscar memória:", error);
-      } finally {
-        setIsLoading(false);
-      }
+  useEffect(() => {
+    if (memorie) {
+      setTitle(memorie.title || "");
+      setContent(memorie.content || "");
     }
+  }, [memorie]);
 
-    fetchMemories();
-  }, [id]);
-
-  const updateMemory = useCallback(
-    async (newContent: string, newTitle: string) => {
-      try {
-        setIsSaving(true);
-        await api.put(`/memories/${id}`, {
-          title: newTitle,
-          content: newContent,
-        });
-        setMemorie((prev) =>
-          prev
-            ? {
-                ...prev,
-                title: newTitle,
-                content: newContent,
-              }
-            : prev,
-        );
-      } catch (err) {
-        console.error("Erro ao atualizar memória:", err);
-      } finally {
-        setIsSaving(false);
-      }
+  const handleUpdate = useCallback(
+    (title: string, content: string) => {
+      const payload = {
+        title,
+        content,
+      };
+      updateMemorie.mutate({ id: Number(id), payload });
     },
-    [id],
+    [id, updateMemorie],
   );
 
   useEffect(() => {
-    if ((!title && !content) || isLoading) return;
+    if (!memorie) return;
 
-    const timeoutId = setTimeout(() => {
-      updateMemory(content, title);
-    }, 2000);
+    if (title !== memorie.title || content !== memorie.content) {
+      setIsSaving(true);
 
-    return () => clearTimeout(timeoutId);
-  }, [content, title, isLoading, updateMemory]);
+      const timeout = setTimeout(() => {
+        handleUpdate(title, content);
+        setIsSaving(false);
+      }, 2000);
 
-  const handleEditorChange = useCallback(
-    (newContent: string, newTitle: string) => {
-      setContent(newContent);
-      setTitle(newTitle);
-    },
-    [],
-  );
-
-  const handleTitleChange = useCallback((newTitle: string) => {
-    setTitle(newTitle);
-  }, []);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsSaving(false);
+    }
+  }, [title, content, memorie, handleUpdate]);
 
   if (isLoading) {
     return (
@@ -94,20 +61,26 @@ export default function Memory({ params }: MemoriePageProps) {
       </div>
     );
   }
-  if (memorie) {
-    return (
-      <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col text-gray-800">
-        <MemoryHeader memorie={memorie} isSaving={isSaving} title={title} />
 
-        <div className="w-full flex-1 overflow-y-auto">
-          <SimpleEditor
-            title={title}
-            content={content}
-            onTitleChange={handleTitleChange}
-            onContentChange={handleEditorChange}
-          />
-        </div>
+  if (!memorie) {
+    return (
+      <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col items-center justify-center">
+        <div>Memória não encontrada.</div>
       </div>
     );
   }
+
+  return (
+    <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col text-gray-800">
+      <MemoryHeader memorie={memorie} isSaving={isSaving} title={title} />
+      <div className="w-full flex-1 overflow-y-auto">
+        <SimpleEditor
+          title={title}
+          content={content}
+          onTitleChange={setTitle}
+          onContentChange={setContent}
+        />
+      </div>
+    </div>
+  );
 }

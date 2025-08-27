@@ -17,3 +17,8 @@ export async function createMemorie(payload: Partial<MemorieType>) {
   const { data } = await api.post("/memories", payload);
   return data;
 }
+
+export async function updateMemorie(id: number, payload: Partial<MemorieType>) {
+  const { data } = await api.put(`/memories/${id}`, payload);
+  return data;
+}

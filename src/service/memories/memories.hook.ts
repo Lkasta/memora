@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMemories, getMemorieById, createMemorie } from "./memories";
+import { getMemories, getMemorieById, createMemorie, updateMemorie } from "./memories";
 import { MemorieType } from "@/types/Memorie";
 
 export function useMemories() {
@@ -26,6 +26,24 @@ export function useCreateMemorie() {
     mutationFn: createMemorie,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["memories"] });
+    },
+  });
+}
+
+export function useUpdateMemorie() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: number;
+      payload: Partial<MemorieType>;
+    }) => updateMemorie(id, payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["memories"] });
+      queryClient.invalidateQueries({ queryKey: ["memories", variables.id] });
     },
   });
 }
