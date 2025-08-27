@@ -28,12 +28,6 @@ export function NewMemorie() {
         event_date: now,
         user_id: 1,
       });
-      console.log({
-        title: "Nova Memória",
-        content: "Escreva aqui...",
-        event_date: now,
-        user_id: 1,
-      });
 
       const memoryId = response.data.id;
       router.push(`/memory/${memoryId}`);
