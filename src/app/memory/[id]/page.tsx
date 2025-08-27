@@ -1,12 +1,12 @@
 "use client";
 
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { Button } from "@/components/ui/button";
 import api from "@/lib/api";
-import { MemorieType } from "@/types/Memorie";
-import { formatMemorieDateDetailed } from "@/utils/dates";
-import { ChevronLeft } from "lucide-react";
+
 import { useEffect, useState, use, useCallback } from "react";
+
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import { MemorieType } from "@/types/Memorie";
+import { MemoryHeader } from "../components/MemoryHeader";
 
 interface MemoriePageProps {
   params: Promise<{ id: string }>;
@@ -43,16 +43,18 @@ export default function Memory({ params }: MemoriePageProps) {
     async (newContent: string, newTitle: string) => {
       try {
         setIsSaving(true);
-        await api.put(`/memories/${id}`, { 
+        await api.put(`/memories/${id}`, {
           title: newTitle,
-          content: newContent 
+          content: newContent,
         });
-        setMemorie((prev) => 
-          prev ? { 
-            ...prev, 
-            title: newTitle,
-            content: newContent 
-          } : prev
+        setMemorie((prev) =>
+          prev
+            ? {
+                ...prev,
+                title: newTitle,
+                content: newContent,
+              }
+            : prev,
         );
       } catch (err) {
         console.error("Erro ao atualizar memória:", err);
@@ -64,7 +66,7 @@ export default function Memory({ params }: MemoriePageProps) {
   );
 
   useEffect(() => {
-    if (!title && !content || isLoading) return;
+    if ((!title && !content) || isLoading) return;
 
     const timeoutId = setTimeout(() => {
       updateMemory(content, title);
@@ -73,10 +75,13 @@ export default function Memory({ params }: MemoriePageProps) {
     return () => clearTimeout(timeoutId);
   }, [content, title, isLoading, updateMemory]);
 
-  const handleEditorChange = useCallback((newContent: string, newTitle: string) => {
-    setContent(newContent);
-    setTitle(newTitle);
-  }, []);
+  const handleEditorChange = useCallback(
+    (newContent: string, newTitle: string) => {
+      setContent(newContent);
+      setTitle(newTitle);
+    },
+    [],
+  );
 
   const handleTitleChange = useCallback((newTitle: string) => {
     setTitle(newTitle);
@@ -89,33 +94,20 @@ export default function Memory({ params }: MemoriePageProps) {
       </div>
     );
   }
+  if (memorie) {
+    return (
+      <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col text-gray-800">
+        <MemoryHeader memorie={memorie} isSaving={isSaving} title={title} />
 
-  return (
-    <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col text-gray-800">
-      {/* Cabeçalho fixo */}
-      <div className="grid h-[60px] flex-shrink-0 grid-cols-3 items-center border-b px-6 py-3">
-        <div className="flex items-center gap-2 text-gray-700">
-          <ChevronLeft size={16} />
-          <span className="text-sm font-bold">
-            {title || "Sem título"}
-          </span>
-          {isSaving && (
-            <span className="text-xs text-gray-400 ml-2">Salvando...</span>
-          )}
+        <div className="w-full flex-1 overflow-y-auto">
+          <SimpleEditor
+            title={title}
+            content={content}
+            onTitleChange={handleTitleChange}
+            onContentChange={handleEditorChange}
+          />
         </div>
-        <h1 className="text-center text-sm font-bold text-gray-500">
-          {formatMemorieDateDetailed(memorie?.event_date || new Date())}
-        </h1>
       </div>
-
-      <div className="w-full flex-1 overflow-y-auto">
-        <SimpleEditor 
-          title={title}
-          content={content} 
-          onTitleChange={handleTitleChange}
-          onContentChange={handleEditorChange}
-        />
-      </div>
-    </div>
-  );
+    );
+  }
 }
