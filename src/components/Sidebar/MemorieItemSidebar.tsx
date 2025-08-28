@@ -23,7 +23,7 @@ export function MemorieItemSidebar({
         <div className="flex gap-1">
           <h1 className="truncate text-xs font-bold text-gray-700">{title}</h1>
           <p className="text-xs font-semibold text-nowrap text-gray-500">
-            • {formatMemorieDate(event_date)}
+            • {formatMemorieDate(new Date(event_date))}
           </p>
         </div>
         <p className="truncate text-xs text-gray-500">
