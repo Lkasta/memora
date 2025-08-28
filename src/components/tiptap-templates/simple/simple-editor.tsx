@@ -14,9 +14,10 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { Selection } from "@tiptap/extensions";
 import { Placeholder } from "@tiptap/extension-placeholder";
+import { TextStyle, Color } from "@tiptap/extension-text-style";
 
 // --- UI Primitives ---
-import { Button } from "@/components/tiptap-ui-primitive/button";
+// import { Button } from "@/components/tiptap-ui-primitive/button";
 import { Spacer } from "@/components/tiptap-ui-primitive/spacer";
 import {
   Toolbar,
@@ -60,10 +61,16 @@ import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+import { cn, handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
 
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 interface SimpleEditorProps {
   title?: string;
@@ -101,6 +108,7 @@ const MainToolbarContent = ({
           <ColorHighlightPopoverButton onClick={onHighlighterClick} />
         )}
         {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+        <TextColorButton />
         {/* 
         <TextAlignButton align="left" />
         <TextAlignButton align="center" />
@@ -144,6 +152,67 @@ const MobileToolbarContent = ({
     )}
   </>
 );
+
+const colors = [
+  { hex: "#000000", name: "Preto" },
+  { hex: "#ef4444", name: "Vermelho" },
+  { hex: "#22c55e", name: "Verde" },
+  { hex: "#3b82f6", name: "Azul" },
+  { hex: "#facc15", name: "Amarelo" },
+  { hex: "#ec4899", name: "Magenta" },
+  { hex: "#22d3ee", name: "Ciano" },
+  { hex: "#f97316", name: "Laranja" },
+  { hex: "#a855f7", name: "Roxo" },
+  { hex: "#a1a1aa", name: "Cinza" },
+];
+
+export function TextColorButton() {
+  const { editor } = React.useContext(EditorContext);
+  const [selected, setSelected] = React.useState<string | null>(null);
+
+  const handleSelect = (color: string) => {
+    setSelected(color);
+    editor?.chain().focus().setColor(color).run();
+  };
+
+  const handleUnset = () => {
+    setSelected(null);
+    editor?.chain().focus().unsetColor().run();
+  };
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="h-6 w-6 rounded-full p-0"
+          style={{ backgroundColor: selected ?? "white" }}
+        />
+      </PopoverTrigger>
+      <PopoverContent className="flex h-fit w-fit flex-wrap gap-2 p-2">
+        {colors.map((color) => (
+          <button
+            key={color.hex}
+            onClick={() => handleSelect(color.hex)}
+            title={color.name}
+            className={cn(
+              "h-5 w-5 rounded-full border transition hover:scale-110",
+              selected === color.hex && "ring-2 ring-gray-200 ring-offset-1",
+            )}
+            style={{ backgroundColor: color.hex }}
+          />
+        ))}
+        <button
+          onClick={handleUnset}
+          title="Remover cor"
+          className="flex h-5 w-5 items-center justify-center rounded-full border text-xs"
+        >
+          ×
+        </button>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 export function SimpleEditor({
   title = "",
@@ -189,6 +258,8 @@ export function SimpleEditor({
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
+      TextStyle,
+      Color,
       Image,
       Typography,
       Superscript,
