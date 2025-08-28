@@ -309,6 +309,7 @@ export function SimpleEditor({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title]);
+
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
       setMobileView("main");
@@ -334,7 +335,7 @@ export function SimpleEditor({
         </Toolbar>
 
         {/* Campo de título separado - sempre H1 */}
-        <div className="mx-12 mt-3">
+        <div className="px-12 pt-3">
           <input
             type="text"
             value={currentTitle}
@@ -351,7 +352,7 @@ export function SimpleEditor({
         <EditorContent
           editor={editor}
           role="presentation"
-          className="w-full mx-12 mt-6"
+          className="px-12 pt-6 w-full"
         />
       </EditorContext.Provider>
     </div>
