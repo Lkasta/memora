@@ -20,6 +20,8 @@ export default function Memory({ params }: MemoriePageProps) {
   const updateMemorie = useUpdateMemorie();
   const { data: memorie, isLoading, error } = useMemorie(Number(id));
 
+  console.log(error)
+
   useEffect(() => {
     if (memorie) {
       setTitle(memorie.title || "");
@@ -55,7 +57,7 @@ export default function Memory({ params }: MemoriePageProps) {
     }
   }, [title, content, memorie, handleUpdate]);
 
-  if (error || !memorie) {
+  if (error) {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center gap-4">
         <MemoGhost404 />
@@ -68,7 +70,7 @@ export default function Memory({ params }: MemoriePageProps) {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || !memorie) {
     return (
       <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col items-center justify-center">
         <div>Carregando memória...</div>
