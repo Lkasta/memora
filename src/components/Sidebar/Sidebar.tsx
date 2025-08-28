@@ -57,10 +57,9 @@ export function Sidebar() {
     <div className="flex h-screen w-full max-w-72 flex-col border-r">
       <div className="flex flex-col gap-3 px-6 pt-3">
         <Logo />
-        <NewMemorie />
       </div>
+      <h1 className="mx-6 mt-3 font-bold text-gray-700">Minhas Memórias</h1>
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <h1 className="mx-6 mt-3 font-bold text-gray-700">Minhas Memórias</h1>
         <Accordion
           defaultValue={data?.group.map((memory) => memory.date)}
           type="multiple"
@@ -100,7 +99,16 @@ export function Sidebar() {
             );
           })}
         </Accordion>
-        <div className="flex w-full flex-col"></div>
+      </div>
+      <div className="mt-auto flex flex-col gap-3 px-6 py-3">
+        <NewMemorie />
+      </div>
+      <div className="flex items-center gap-2 border-t px-6 py-3">
+        <div className="!h-8 !w-8 rounded-full bg-gray-300" />
+        <div className="select-none">
+          <p className="text-sm">Jonas</p>
+          <p className="text-xs">jonas@memora.com</p>
+        </div>
       </div>
     </div>
   );
