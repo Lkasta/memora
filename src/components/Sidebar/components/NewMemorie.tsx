@@ -1,5 +1,5 @@
 import { Loader2Icon, PlusIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { getDateWithTimezone } from "@/utils/dates";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -33,7 +33,7 @@ export function NewMemorie() {
     <Button
       disabled={createMemorie.isPending}
       onClick={handleCreate}
-      className="w-full cursor-pointer bg-violet-500 text-white !transition-all"
+      className="w-full cursor-pointer bg-violet-500 text-white my-1 !transition-all"
     >
       {createMemorie.isPending ? (
         <Loader2Icon className="animate-spin" />

@@ -5,8 +5,8 @@ import { useEffect, useState, useCallback, use } from "react";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { useMemorie, useUpdateMemorie } from "@/service/memories/memories.hook";
 import { MemoryHeader } from "../components/MemoryHeader";
-import { MemoGhost404 } from "@/components/MemoGhost404";
-import { Loader2Icon } from "lucide-react";
+import { Loader } from "@/components/Loader";
+import { Memory404 } from "../components/Memory404";
 
 interface MemoriePageProps {
   params: Promise<{ id: string }>;
@@ -58,26 +58,12 @@ export default function Memory({ params }: MemoriePageProps) {
     }
   }, [title, content, memorie, handleUpdate]);
 
-  if (error) {
-    return (
-      <div className="flex h-screen w-full flex-col items-center justify-center gap-4">
-        <MemoGhost404 />
-        <div className="text-center select-none">
-          <p className="max-w-52 text-sm text-gray-300">
-            Crie uma nova memória ou selecione uma para continuar.
-          </p>
-        </div>
-      </div>
-    );
+  if (error || isLoading || !memorie) {
+    return <Memory404 />;
   }
 
   if (isLoading || !memorie) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center gap-2">
-        <p className="text-sm">Carregando Memória</p>
-        <Loader2Icon className="animate-spin" size={16} />
-      </div>
-    );
+    return <Loader complement="memória" />;
   }
 
   return (
