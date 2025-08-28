@@ -33,7 +33,7 @@ export function NewMemorie() {
     <Button
       disabled={createMemorie.isPending}
       onClick={handleCreate}
-      className="w-full cursor-pointer bg-violet-500 text-white my-1 !transition-all"
+      className="w-full cursor-pointer bg-violet-500 text-white !transition-all"
     >
       {createMemorie.isPending ? (
         <Loader2Icon className="animate-spin" />
