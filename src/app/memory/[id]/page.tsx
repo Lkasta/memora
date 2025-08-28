@@ -78,7 +78,7 @@ export default function Memory({ params }: MemoriePageProps) {
 
   return (
     <div className="flex h-screen w-full flex-col text-gray-800">
-      <MemoryHeader memorie={memorie} isSaving={isSaving} title={title} />
+      <MemoryHeader eventDate={new Date(memorie.event_date)} isSaving={isSaving} title={title} />
       <div className="w-full flex-1 overflow-y-auto">
         <SimpleEditor
           title={title}
