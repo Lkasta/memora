@@ -16,14 +16,14 @@ export function NewMemorie() {
         "yyyy-MM-dd HH:mm:ss",
       );
 
-      await createMemorie.mutateAsync({
+      const data = await createMemorie.mutateAsync({
         title: "Minha memória",
         content: "Conteúdo da memória",
         event_date: now,
         user_id: 1,
       });
 
-      router.push("/");
+      router.push(`/memory/${data.id}`);
     } catch (err) {
       console.log("Erro ao criar memória:", err);
     }

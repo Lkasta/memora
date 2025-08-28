@@ -1,7 +1,12 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getMemories, getMemorieById, createMemorie, updateMemorie } from "./memories";
+import {
+  getMemories,
+  getMemorieById,
+  createMemorie,
+  updateMemorie,
+} from "./memories";
 import { MemorieType } from "@/types/Memorie";
 
 export function useMemories() {
