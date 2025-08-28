@@ -74,7 +74,7 @@ export default function Memory({ params }: MemoriePageProps) {
   if (isLoading || !memorie) {
     return (
       <div className="flex h-screen w-full items-center justify-center gap-2">
-        <p className="text-sm">Carregando Memórias</p>
+        <p className="text-sm">Carregando Memória</p>
         <Loader2Icon className="animate-spin" size={16} />
       </div>
     );
