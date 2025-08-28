@@ -18,7 +18,7 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
         <Button
           variant="ghost"
           onClick={router.back}
-          className="flex cursor-pointer items-center gap-2 !transition-all"
+          className="flex cursor-pointer items-center gap-2 !p-0 !transition-all hover:bg-transparent hover:text-gray-700"
         >
           <ChevronLeft size={16} />
           <span className="text-sm font-bold">{title || "Sem título"}</span>
