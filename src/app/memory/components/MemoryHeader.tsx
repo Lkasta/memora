@@ -1,5 +1,5 @@
 import { formatMemorieDateDetailed } from "@/utils/dates";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Loader2Icon } from "lucide-react";
 
 type Props = {
   eventDate: Date;
@@ -13,9 +13,7 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
       <div className="flex items-center gap-2 text-gray-700">
         <ChevronLeft size={16} />
         <span className="text-sm font-bold">{title || "Sem título"}</span>
-        {isSaving && (
-          <span className="ml-2 text-xs text-gray-400">Salvando...</span>
-        )}
+        {isSaving && <Loader2Icon className="animate-spin" size={12} />}
       </div>
       <h1 className="text-center text-sm font-bold text-gray-500">
         {formatMemorieDateDetailed(eventDate)}

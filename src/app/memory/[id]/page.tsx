@@ -6,6 +6,7 @@ import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor
 import { useMemorie, useUpdateMemorie } from "@/service/memories/memories.hook";
 import { MemoryHeader } from "../components/MemoryHeader";
 import { MemoGhost404 } from "@/components/MemoGhost404";
+import { Loader2Icon } from "lucide-react";
 
 interface MemoriePageProps {
   params: Promise<{ id: string }>;
@@ -20,7 +21,7 @@ export default function Memory({ params }: MemoriePageProps) {
   const updateMemorie = useUpdateMemorie();
   const { data: memorie, isLoading, error } = useMemorie(Number(id));
 
-  console.log(error)
+  console.log(error);
 
   useEffect(() => {
     if (memorie) {
@@ -72,15 +73,20 @@ export default function Memory({ params }: MemoriePageProps) {
 
   if (isLoading || !memorie) {
     return (
-      <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col items-center justify-center">
-        <div>Carregando memória...</div>
+      <div className="flex h-screen w-full items-center justify-center gap-2">
+        <p className="text-sm">Carregando Memórias</p>
+        <Loader2Icon className="animate-spin" size={16} />
       </div>
     );
   }
 
   return (
     <div className="flex h-screen w-full flex-col text-gray-800">
-      <MemoryHeader eventDate={new Date(memorie.event_date)} isSaving={isSaving} title={title} />
+      <MemoryHeader
+        eventDate={new Date(memorie.event_date)}
+        isSaving={isSaving}
+        title={title}
+      />
       <div className="w-full flex-1 overflow-y-auto">
         <SimpleEditor
           title={title}

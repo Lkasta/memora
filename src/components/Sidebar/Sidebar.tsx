@@ -3,16 +3,18 @@ import { MemorieItemSidebar } from "./MemorieItemSidebar";
 import { NewMemorie } from "./NewMemorie";
 import Link from "next/link";
 import { useMemories } from "@/service/memories/memories.hook";
-import { Loader } from "lucide-react";
+import { Loader2Icon } from "lucide-react";
 
 export function Sidebar() {
   const { data: memories, isLoading } = useMemories();
 
   if (isLoading) {
     return (
-      <div className="flex h-full w-full flex-1 items-center justify-center gap-1">
-        <Loader className="animate-spin" size={16} />
-        <p className="text-sm">Carregando Memórias</p>
+      <div className="flex h-screen w-full max-w-72 flex-col items-center justify-center border-r">
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-nowrap">Carregando Memórias</p>
+          <Loader2Icon className="animate-spin" size={12} />
+        </div>
       </div>
     );
   }
