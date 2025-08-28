@@ -123,6 +123,22 @@
     font-family: var(--font-inter);
   }
 
+  .tiptap.ProseMirror h1,
+  .tiptap.ProseMirror h2,
+  .tiptap.ProseMirror h3,
+  .tiptap.ProseMirror h4,
+  .tiptap.ProseMirror h5,
+  .tiptap.ProseMirror h6 {
+    margin-top: 1em !important; /* Reduz drasticamente o margin-top */
+    margin-bottom: 0 !important;
+  }
+
+  /* Linha divisória no TipTap */
+  .tiptap.ProseMirror hr {
+    margin-top: 1em !important;
+    margin-bottom: 1em !important;
+  }
+
   /* Webkit browsers (Chrome, Safari, Edge) */
   ::-webkit-scrollbar {
     width: 4px;

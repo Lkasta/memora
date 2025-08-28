@@ -334,7 +334,7 @@ export function SimpleEditor({
         </Toolbar>
 
         {/* Campo de título separado - sempre H1 */}
-        <div className="px-12 pt-6 pb-2">
+        <div className="mx-12 mt-3">
           <input
             type="text"
             value={currentTitle}
@@ -351,7 +351,7 @@ export function SimpleEditor({
         <EditorContent
           editor={editor}
           role="presentation"
-          className="w-full px-12 pt-6"
+          className="w-full mx-12 mt-6"
         />
       </EditorContext.Provider>
     </div>
