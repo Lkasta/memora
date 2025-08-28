@@ -56,7 +56,7 @@ export default function Memory({ params }: MemoriePageProps) {
     }
   }, [title, content, memorie, handleUpdate]);
 
-  if (error || isLoading || !memorie) {
+  if (error) {
     return <Memory404 />;
   }
 
