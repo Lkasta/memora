@@ -21,8 +21,6 @@ export default function Memory({ params }: MemoriePageProps) {
   const updateMemorie = useUpdateMemorie();
   const { data: memorie, isLoading, error } = useMemorie(Number(id));
 
-  console.log(error);
-
   useEffect(() => {
     if (memorie) {
       setTitle(memorie.title || "");
