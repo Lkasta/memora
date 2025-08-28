@@ -101,13 +101,13 @@ const MainToolbarContent = ({
           <ColorHighlightPopoverButton onClick={onHighlighterClick} />
         )}
         {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
+        {/* 
         <TextAlignButton align="left" />
         <TextAlignButton align="center" />
         <TextAlignButton align="right" />
         <TextAlignButton align="justify" />
+        */}
       </ToolbarGroup>
-
-      <ToolbarSeparator />
 
       <Spacer />
 
@@ -174,7 +174,7 @@ export function SimpleEditor({
       StarterKit.configure({
         horizontalRule: false,
         heading: {
-          levels: [2, 3, 4], // Remove h1 do editor já que será separado
+          levels: [1, 2, 3, 4, 5],
         },
         link: {
           openOnClick: false,
@@ -185,7 +185,7 @@ export function SimpleEditor({
         placeholder: "Escreva algo aqui...",
       }),
       HorizontalRule,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      // TextAlign.configure({ types: ["heading", "paragraph"] }),
       TaskList,
       TaskItem.configure({ nested: true }),
       Highlight.configure({ multicolor: true }),
@@ -236,7 +236,7 @@ export function SimpleEditor({
     if (title !== currentTitle) {
       setCurrentTitle(title);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [title]);
   React.useEffect(() => {
     if (!isMobile && mobileView !== "main") {
@@ -269,10 +269,10 @@ export function SimpleEditor({
             value={currentTitle}
             onChange={handleTitleChange}
             placeholder="Digite o título aqui..."
-            className="w-full text-3xl font-bold text-gray-900 bg-transparent border-none outline-none resize-none placeholder-gray-400"
+            className="w-full resize-none border-none bg-transparent text-3xl font-bold text-gray-900 placeholder-gray-400 outline-none"
             style={{
-              fontFamily: 'inherit',
-              lineHeight: '1.2',
+              fontFamily: "inherit",
+              lineHeight: "1.2",
             }}
           />
         </div>
