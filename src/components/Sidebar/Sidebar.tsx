@@ -98,6 +98,40 @@ export function Sidebar() {
               </AccordionItem>
             );
           })}
+          {data?.group.map((memory) => {
+            return (
+              <AccordionItem
+                key={memory.date}
+                value={memory.date}
+                className="border-0"
+              >
+                <AccordionTrigger
+                  chevronClassName="text-gray-300 !transition-all"
+                  className="group mx-6 cursor-pointer gap-1 pt-3 pb-1.5 hover:no-underline"
+                >
+                  <span className="text-xs font-bold text-gray-300 capitalize group-hover:underline">
+                    {format(memory.date, "MMMM yy", { locale: ptBR })}
+                  </span>
+                  <span className="mr-auto text-xs font-bold text-gray-300 capitalize group-hover:underline">
+                    ({memory.memories.length})
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="pb-0">
+                  {memory.memories.map((memorie) => {
+                    return (
+                      <MemorieItemSidebar
+                        key={memorie.id}
+                        id={memorie.id}
+                        title={memorie.title}
+                        content={memorie.content}
+                        event_date={memorie.event_date}
+                      />
+                    );
+                  })}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
         </Accordion>
       </div>
       <div className="mt-auto flex flex-col gap-3 px-6 py-3">
