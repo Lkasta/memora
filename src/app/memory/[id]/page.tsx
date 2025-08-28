@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback, use } from "react";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { useMemorie, useUpdateMemorie } from "@/service/memories/memories.hook";
 import { MemoryHeader } from "../components/MemoryHeader";
+import { MemoGhost404 } from "@/components/MemoGhost404";
 
 interface MemoriePageProps {
   params: Promise<{ id: string }>;
@@ -17,7 +18,7 @@ export default function Memory({ params }: MemoriePageProps) {
   const [isSaving, setIsSaving] = useState(false);
 
   const updateMemorie = useUpdateMemorie();
-  const { data: memorie, isLoading } = useMemorie(Number(id));
+  const { data: memorie, isLoading, error } = useMemorie(Number(id));
 
   useEffect(() => {
     if (memorie) {
@@ -54,6 +55,19 @@ export default function Memory({ params }: MemoriePageProps) {
     }
   }, [title, content, memorie, handleUpdate]);
 
+  if (error || !memorie) {
+    return (
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-4">
+        <MemoGhost404 />
+        <div className="text-center select-none">
+          <p className="max-w-52 text-sm text-gray-300">
+            Crie uma nova memória ou selecione uma para continuar.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col items-center justify-center">
@@ -62,16 +76,8 @@ export default function Memory({ params }: MemoriePageProps) {
     );
   }
 
-  if (!memorie) {
-    return (
-      <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col items-center justify-center">
-        <div>Memória não encontrada.</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex h-screen w-full max-w-[calc(100vw-290px)] flex-col text-gray-800">
+    <div className="flex h-screen w-full flex-col text-gray-800">
       <MemoryHeader memorie={memorie} isSaving={isSaving} title={title} />
       <div className="w-full flex-1 overflow-y-auto">
         <SimpleEditor
