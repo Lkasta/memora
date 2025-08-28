@@ -22,8 +22,8 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
         >
           <ChevronLeft size={16} />
           <span className="text-sm font-bold">{title || "Sem título"}</span>
-          {isSaving && <Loader2Icon className="animate-spin" size={12} />}
         </Button>
+        {isSaving && <Loader2Icon className="animate-spin" size={12} />}
       </div>
       <h1 className="text-center text-sm font-bold text-gray-500">
         {formatMemorieDateDetailed(eventDate)}
