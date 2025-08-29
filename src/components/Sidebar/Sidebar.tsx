@@ -5,7 +5,7 @@ import { useMemories } from "@/service/memories/memories.hook";
 import { Loader } from "../Loader";
 import { Logo } from "./components/Logo";
 import { MemorieType } from "@/types/Memorie";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import {
   Accordion,
   AccordionContent,
@@ -28,7 +28,7 @@ export function Sidebar() {
 
   const data = memories?.reduce(
     (acc, memorie) => {
-      const dateKey = format(memorie.event_date, "yyyy-MM");
+      const dateKey = format(memorie.event_date, "yyyy-MM-dd");
       const dateItem = acc.group.find((m) => m.date === dateKey);
 
       if (dateItem) {
@@ -65,6 +65,7 @@ export function Sidebar() {
           type="multiple"
         >
           {data?.group.map((memory) => {
+            const date = parse(memory.date, "yyyy-MM-dd", new Date());
             return (
               <AccordionItem
                 key={memory.date}
@@ -76,7 +77,7 @@ export function Sidebar() {
                   className="group mx-6 cursor-pointer gap-1 pt-3 pb-1.5 hover:no-underline"
                 >
                   <span className="text-xs font-bold text-gray-300 capitalize group-hover:underline">
-                    {format(memory.date, "MMMM yy", { locale: ptBR })}
+                    {format(date, "MMMM yy", { locale: ptBR })}
                   </span>
                   <span className="mr-auto text-xs font-bold text-gray-300 capitalize group-hover:underline">
                     ({memory.memories.length})
