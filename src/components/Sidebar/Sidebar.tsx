@@ -28,7 +28,7 @@ export function Sidebar() {
 
   const data = memories?.reduce(
     (acc, memorie) => {
-      const dateKey = format(memorie.event_date, "yyyy-MM-dd");
+      const dateKey = format(memorie.event_date, "yyyy-MM");
       const dateItem = acc.group.find((m) => m.date === dateKey);
 
       if (dateItem) {
@@ -65,7 +65,7 @@ export function Sidebar() {
           type="multiple"
         >
           {data?.group.map((memory) => {
-            const date = parse(memory.date, "yyyy-MM-dd", new Date());
+            const date = parse(memory.date, "yyyy-MM", new Date());
             return (
               <AccordionItem
                 key={memory.date}
