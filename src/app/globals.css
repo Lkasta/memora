@@ -64,7 +64,7 @@
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(96.115% 0.00011 271.152);
   --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --ring: oklch(60.6% 0.25 292.717);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -78,6 +78,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --selection-bg: oklch(60.6% 0.25 292.717 / 0.7);
+  --selection-text: oklch(0.97 0 0);
 }
 
 .dark {
@@ -121,6 +123,16 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-inter);
+  }
+
+  ::selection {
+    background-color: var(--selection-bg) !important;
+    color: var(--selection-text) !important;
+  }
+
+  ::-moz-selection {
+    background-color: var(--selection-bg) !important;
+    color: var(--selection-text) !important;
   }
 
   .tiptap.ProseMirror h1,
