@@ -1,6 +1,6 @@
 import { MemorieType } from "@/types/Memorie";
 import { formatMemorieDate } from "@/utils/dates";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type MemorieSidebarType = Pick<
   MemorieType,
@@ -13,9 +13,11 @@ export function MemorieItemSidebar({
   event_date,
   content,
 }: MemorieSidebarType) {
+  const router = useRouter();
+
   return (
-    <Link
-      href={`/memory/${id}`}
+    <div
+      onClick={() => router.push(`/memory/${id}`)}
       className="flex cursor-pointer items-center gap-3 border-b px-6 py-1.5 transition-all hover:bg-gray-100"
     >
       <div className="!h-10 !w-10 rounded-lg bg-gray-300" />
@@ -30,6 +32,6 @@ export function MemorieItemSidebar({
           {content.replace(/<[^>]+>/g, "").slice(0, 40)}
         </p>
       </div>
-    </Link>
+    </div>
   );
 }
