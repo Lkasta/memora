@@ -1,7 +1,7 @@
 interface CustomIconProps {
   className?: string;
   fillColor?: string;
-  size?: number;
+  size?: number | "full";
 }
 
 export function MemoGhost({
@@ -9,11 +9,13 @@ export function MemoGhost({
   fillColor = "fill-gray-200",
   size = 92,
 }: CustomIconProps) {
-  const height = Math.round((size * 114) / 92);
+  const isFull = size === "full";
+  const width = isFull ? "100%" : size;
+  const height = isFull ? "100%" : Math.round(((size as number) * 114) / 92);
 
   return (
     <svg
-      width={size}
+      width={width}
       height={height}
       viewBox="0 0 92 114"
       fill="none"

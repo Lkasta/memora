@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { QueryProvider } from "@/providers/query-provider";
+import { SidebarWrapper } from "@/components/Sidebar/SidebarWrapper";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="pt-br">
       <body className={`${inter.variable} flex antialiased`}>
         <QueryProvider>
-          <Sidebar />
+          <SidebarWrapper />
           {children}
         </QueryProvider>
       </body>
