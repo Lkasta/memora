@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { SidebarWrapper } from "@/components/Sidebar/SidebarWrapper";
+import AuthProvider from "@/providers/AuthProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={`${inter.variable} flex antialiased`}>
-        <QueryProvider>
-          <SidebarWrapper />
-          {children}
-        </QueryProvider>
+        <AuthProvider>
+          <QueryProvider>
+            <SidebarWrapper />
+            {children}
+          </QueryProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,14 +1,30 @@
+"use client";
+
 import { MemoGhost } from "@/components/MemoGhost";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLogin } from "@/hooks/useLogin";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const login = useLogin();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    login.mutate({ email, password });
+  };
+
   return (
     <div className="grid h-screen w-full grid-cols-2">
       <div className="flex h-full w-full items-center justify-center">
-        <div className="m-2 flex w-full max-w-[400px] flex-col gap-3">
+        <form
+          onSubmit={handleSubmit}
+          className="m-2 flex w-full max-w-[400px] flex-col gap-3"
+        >
           <h1 className="mb-3 text-5xl font-bold text-gray-800">
             <span className="text-violet-500">me</span>mora
           </h1>
@@ -18,6 +34,8 @@ export default function Login() {
               <Input
                 name="email"
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="jonas@example.com"
                 className="focus:border-0"
               />
@@ -28,6 +46,8 @@ export default function Login() {
               <Input
                 name="password"
                 type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 className="focus:border-0"
               />
@@ -51,12 +71,12 @@ export default function Login() {
           <Button className="cursor-pointer bg-violet-500 !transition-all">
             Entrar
           </Button>
-        </div>
+        </form>
       </div>
       <div className="relative h-full w-full overflow-hidden bg-violet-500">
         <MemoGhost
           size="full"
-          className="absolute -bottom-[10%] xl:-bottom-[20%] left-1/2 h-auto w-[90%] xl:w-[80%] -translate-x-1/2 mt-[20%]"
+          className="absolute -bottom-[10%] left-1/2 mt-[20%] h-auto w-[90%] -translate-x-1/2 xl:-bottom-[20%] xl:w-[80%]"
           fillColor="fill-violet-600"
         />
       </div>
