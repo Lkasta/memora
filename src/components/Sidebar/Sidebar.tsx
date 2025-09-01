@@ -13,6 +13,10 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { ptBR } from "date-fns/locale";
+import { useAuth } from "@/store/useAuth"; // Importa o store de auth
+import { LogOut } from "lucide-react";
+import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface GroupMemorieProps {
   date: string;
@@ -25,6 +29,14 @@ interface GroupMemoriesProps {
 
 export function Sidebar() {
   const { data: memories, isLoading } = useMemories();
+  const router = useRouter();
+  const { user } = useAuth();
+  const auth = useAuth();
+
+  function handleLogout() {
+    auth.logout();
+    router.push("/login");
+  }
 
   const data = memories?.reduce(
     (acc, memorie) => {
@@ -104,12 +116,21 @@ export function Sidebar() {
       <div className="mt-auto flex flex-col gap-3 px-6 py-3">
         <NewMemorie />
       </div>
-      <div className="flex items-center gap-2 border-t px-6 py-3">
-        <div className="!h-8 !w-8 rounded-full bg-gray-300" />
-        <div className="select-none">
-          <p className="text-sm">Jonas</p>
-          <p className="text-xs">jonas@memora.com</p>
+      <div className="flex items-center justify-between gap-2 border-t px-6 py-3">
+        <div className="flex items-center gap-3">
+          <div className="!h-10 !w-10 rounded-full bg-gray-300" />
+          <div className="select-none">
+            <p className="text-sm">{user?.username}</p>
+            <p className="text-xs">{user?.email}</p>
+          </div>
         </div>
+        <Button
+          onClick={() => handleLogout()}
+          variant="ghost"
+          className="cursor-pointer !p-0 !transition-all hover:bg-transparent hover:text-rose-500"
+        >
+          <LogOut size={16} />
+        </Button>
       </div>
     </div>
   );
