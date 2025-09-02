@@ -4,8 +4,7 @@ import { ReactNode, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/store/useAuth";
 import { Loader } from "@/components/Loader";
-
-const publicRoutes = ["/login", "/register"];
+import { publicRoutes } from "@/utils/routes";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const { token, isLoading, initializeAuth, logout, isTokenValid } = useAuth();
