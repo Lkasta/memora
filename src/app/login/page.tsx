@@ -1,6 +1,7 @@
 "use client";
 
-import { MemoGhost } from "@/components/MemoGhost";
+import { AuthAside } from "@/components/Auth/AuthAside";
+import { AuthLogo } from "@/components/Auth/AuthLogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,9 +26,7 @@ export default function Login() {
           onSubmit={handleSubmit}
           className="m-2 flex w-full max-w-[400px] flex-col gap-3"
         >
-          <h1 className="mb-3 text-5xl font-bold text-gray-800">
-            <span className="text-violet-500">me</span>mora
-          </h1>
+          <AuthLogo />
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <Label htmlFor="email">E-mail</Label>
@@ -62,7 +61,7 @@ export default function Login() {
             </Link>
 
             <Link
-              href="/register"
+              href="/login"
               className="text-sm font-medium text-gray-700 hover:underline"
             >
               Esqueceu a sua senha
@@ -73,13 +72,7 @@ export default function Login() {
           </Button>
         </form>
       </div>
-      <div className="relative h-full w-full overflow-hidden bg-violet-500">
-        <MemoGhost
-          size="full"
-          className="absolute -bottom-[10%] left-1/2 mt-[20%] h-auto w-[90%] -translate-x-1/2 xl:-bottom-[20%] xl:w-[80%]"
-          fillColor="fill-violet-600"
-        />
-      </div>
+      <AuthAside />
     </div>
   );
 }
