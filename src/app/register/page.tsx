@@ -2,23 +2,40 @@
 
 import { AuthAside } from "@/components/Auth/AuthAside";
 import { AuthLogo } from "@/components/Auth/AuthLogo";
+import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLogin } from "@/hooks/use-login";
+import { useRegisterUser } from "@/hooks/use-register";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function Login() {
-  const [user, setUser] = useState("");
+  const { mutate: register, isPending, isSuccess, isError } = useRegisterUser();
+
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confrimPassword, setConfirmPassword] = useState("");
-  const login = useLogin();
+
+  function handleRegister() {
+    register({
+      username: username,
+      email: email,
+      password: password,
+    });
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
+    console.log("Try register");
     e.preventDefault();
-    login.mutate({ email, password });
+    handleRegister();
+    if (isSuccess) {
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    }
   };
 
   return (
@@ -35,8 +52,8 @@ export default function Login() {
               <Input
                 name="user"
                 type="text"
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 placeholder="Informe seu nome de usuário"
                 className="focus:border-0"
               />
@@ -89,8 +106,11 @@ export default function Login() {
               Já tem uma conta
             </Link>
           </div>
-          <Button className="cursor-pointer bg-violet-500 !transition-all">
-            Criar conta
+          <Button
+            disabled={isPending}
+            className="cursor-pointer bg-violet-500 !transition-all"
+          >
+            {isPending ? <Loader /> : "Criar conta"}
           </Button>
         </form>
       </div>
