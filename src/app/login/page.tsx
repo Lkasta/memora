@@ -47,7 +47,6 @@ export default function Login() {
             <AuthLogo />
 
             <div className="flex flex-col gap-3">
-              {/* Campo de E-mail */}
               <FormField
                 control={form.control}
                 name="email"
@@ -66,7 +65,6 @@ export default function Login() {
                 )}
               />
 
-              {/* Campo de Senha */}
               <FormField
                 control={form.control}
                 name="password"
