@@ -31,7 +31,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (hasValidToken && publicRoutes.includes(pathname)) {
-      console.log("vai pra home");
       router.replace("/");
     }
   }, [token, pathname, router, isLoading, isTokenValid, logout]);
