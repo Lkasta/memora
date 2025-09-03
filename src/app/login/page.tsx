@@ -32,7 +32,6 @@ export default function Login() {
   });
 
   function onSubmit(values: LoginSchema) {
-    // console.log(values);
     login(values);
   }
 
