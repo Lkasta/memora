@@ -27,8 +27,8 @@ export function useLogin() {
       return res.data;
     },
     onSuccess: (data) => {
-      loginStore.login(data.user, data.token);
       router.replace("/");
+      loginStore.login(data.user, data.token);
     },
   });
 }

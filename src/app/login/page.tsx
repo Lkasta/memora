@@ -2,6 +2,7 @@
 
 import { AuthAside } from "@/components/Auth/AuthAside";
 import { AuthLogo } from "@/components/Auth/AuthLogo";
+import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,11 +13,11 @@ import { useState } from "react";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const login = useLogin();
+  const { mutate: login, isPending } = useLogin();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login.mutate({ email, password });
+    login({ email, password });
   };
 
   return (
@@ -67,8 +68,11 @@ export default function Login() {
               Esqueceu a sua senha
             </Link>
           </div>
-          <Button className="cursor-pointer bg-violet-500 !transition-all">
-            Entrar
+          <Button
+            disabled={isPending}
+            className="cursor-pointer bg-violet-500 !transition-all"
+          >
+            {isPending ? <Loader /> : "Entrar"}
           </Button>
         </form>
       </div>
