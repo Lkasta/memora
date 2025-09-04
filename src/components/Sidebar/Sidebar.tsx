@@ -61,11 +61,13 @@ export function Sidebar() {
   );
 
   useEffect(() => {
-    if (data?.group) {
-      const allDates = data.group.map((memory) => memory.date);
-      setOpenedAccordions(allDates);
+    if (memories && memories.length > 0) {
+      const dates = Array.from(
+        new Set(memories.map((memory) => format(memory.event_date, "yyyy-MM"))),
+      );
+      setOpenedAccordions(dates);
     }
-  }, [data?.group]);
+  }, [memories]);
 
   if (isLoading) {
     return (
