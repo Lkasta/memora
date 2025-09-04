@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { deleteMemorie } from "@/service/memories/memories";
 import { useDeleteMemorie } from "@/service/memories/memories.hook";
 import { formatMemorieDateDetailed } from "@/utils/dates";
 import { ChevronLeft, Loader2Icon, Trash } from "lucide-react";
