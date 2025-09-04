@@ -13,10 +13,11 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { ptBR } from "date-fns/locale";
-import { useAuth } from "@/store/useAuth"; 
+import { useAuth } from "@/store/useAuth";
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 interface GroupMemorieProps {
   date: string;
@@ -32,6 +33,8 @@ export function Sidebar() {
   const router = useRouter();
   const { user } = useAuth();
   const auth = useAuth();
+
+  const [openedAccordions, setOpenedAccordions] = useState<string[]>([]);
 
   function handleLogout() {
     auth.logout();
@@ -57,6 +60,13 @@ export function Sidebar() {
     { group: [] } as GroupMemoriesProps,
   );
 
+  useEffect(() => {
+    if (data?.group) {
+      const allDates = data.group.map((memory) => memory.date);
+      setOpenedAccordions(allDates);
+    }
+  }, [data?.group]);
+
   if (isLoading) {
     return (
       <div className="flex h-screen w-full max-w-72 flex-col items-center justify-center border-r">
@@ -76,7 +86,8 @@ export function Sidebar() {
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         <Accordion
-          defaultValue={data?.group.map((memory) => memory.date)}
+          value={openedAccordions}
+          onValueChange={setOpenedAccordions}
           type="multiple"
         >
           {data?.group.map((memory) => {
