@@ -61,7 +61,7 @@ export default function Register() {
             <AuthLogo />
 
             {form.formState.errors.root && (
-              <div className="rounded-md bg-red-100 p-2 text-sm text-red-600">
+              <div className="rounded-md border border-red-500 bg-red-100 p-2 text-sm text-red-500">
                 {form.formState.errors.root.message}
               </div>
             )}
