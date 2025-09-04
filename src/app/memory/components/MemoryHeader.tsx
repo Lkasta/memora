@@ -1,8 +1,16 @@
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useDeleteMemorie } from "@/service/memories/memories.hook";
 import { formatMemorieDateDetailed } from "@/utils/dates";
-import { ChevronLeft, Loader2Icon, Trash } from "lucide-react";
+import { ChevronLeft, Loader2Icon, Settings2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { DeleteMemoryConfirm } from "./DeleteMemoryConfirm";
 
 type Props = {
   eventDate: Date;
@@ -23,7 +31,7 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
   }
 
   return (
-    <div className="grid h-14 flex-shrink-0 grid-cols-3 items-center border-b px-6 py-3">
+    <div className="grid h-15 flex-shrink-0 grid-cols-3 items-center border-b px-6 py-3">
       <div className="flex items-center gap-2 text-gray-700">
         <Button
           variant="ghost"
@@ -39,13 +47,26 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
         {formatMemorieDateDetailed(eventDate)}
       </h1>
 
-      <Button
-        onClick={() => handleDelete(Number(memorieId))}
-        variant="ghost"
-        className="ml-auto w-min cursor-pointer !transition-all"
-      >
-        {isPending ? <Loader2Icon className="animate-spin" /> : <Trash />}
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger className="ml-auto w-min">
+          <Button
+            variant="ghost"
+            className="ml-auto w-min cursor-pointer !transition-all"
+          >
+            <Settings2 size={16} />
+            Opções
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="mr-3">
+          <DropdownMenuLabel>Ações da memória</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          {/* <DropdownMenuItem>Favoritar</DropdownMenuItem> */}
+          <DeleteMemoryConfirm
+            isPending={isPending}
+            onConfirm={() => handleDelete(Number(memorieId))}
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
