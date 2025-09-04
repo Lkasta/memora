@@ -13,8 +13,8 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { ptBR } from "date-fns/locale";
-import { useAuth } from "@/store/useAuth"; // Importa o store de auth
-import { LogOut, Plus } from "lucide-react";
+import { useAuth } from "@/store/useAuth"; 
+import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
