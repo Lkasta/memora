@@ -18,7 +18,7 @@ export function NewMemorie() {
 
       const data = await createMemorie.mutateAsync({
         title: "Minha memória",
-        content: "Conteúdo da memória",
+        content: "",
         event_date: now,
         user_id: 1,
       });
