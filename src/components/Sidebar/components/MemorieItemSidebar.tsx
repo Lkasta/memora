@@ -1,5 +1,7 @@
+import { MemoGhost } from "@/components/MemoGhost";
 import { MemorieType } from "@/types/Memorie";
 import { formatMemorieDate } from "@/utils/dates";
+import clsx from "clsx";
 import { useRouter } from "next/navigation";
 
 type MemorieSidebarType = Pick<
@@ -7,12 +9,17 @@ type MemorieSidebarType = Pick<
   "title" | "content" | "event_date" | "id"
 >;
 
+interface Props extends MemorieSidebarType {
+  active: boolean;
+}
+
 export function MemorieItemSidebar({
   id,
+  active,
   title,
   event_date,
   content,
-}: MemorieSidebarType) {
+}: Props) {
   const router = useRouter();
 
   return (
@@ -20,7 +27,18 @@ export function MemorieItemSidebar({
       onClick={() => router.push(`/memory/${id}`)}
       className="flex cursor-pointer items-center gap-3 border-b px-6 py-1.5 transition-all hover:bg-gray-100"
     >
-      <div className="!h-10 !w-10 rounded-lg bg-gray-300" />
+      <div
+        className={clsx(
+          "relative !h-10 !w-10 overflow-hidden rounded-lg",
+          active ? "bg-violet-200" : "bg-gray-200",
+        )}
+      >
+        <MemoGhost
+          size="full"
+          className="absolute -bottom-[20%] left-1/2 h-auto w-[80%] -translate-x-1/2"
+          fillColor={active ? "fill-violet-300" : "fill-gray-300"}
+        />
+      </div>
       <div className="flex min-w-0 flex-1 flex-col select-none">
         <div className="flex gap-1">
           <h1 className="truncate text-xs font-bold text-gray-700">{title}</h1>

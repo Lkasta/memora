@@ -16,7 +16,7 @@ import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/store/useAuth";
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 interface GroupMemorieProps {
@@ -30,9 +30,12 @@ interface GroupMemoriesProps {
 
 export function Sidebar() {
   const { data: memories, isLoading } = useMemories();
-  const router = useRouter();
   const { user } = useAuth();
+  const params = useParams();
+  const router = useRouter();
   const auth = useAuth();
+
+  const memorieId = Number(params.id);
 
   const [openedAccordions, setOpenedAccordions] = useState<string[]>([]);
 
@@ -115,6 +118,7 @@ export function Sidebar() {
                   {memory.memories.map((memorie) => {
                     return (
                       <MemorieItemSidebar
+                        active={memorie.id == memorieId}
                         key={memorie.id}
                         id={memorie.id}
                         title={memorie.title}
