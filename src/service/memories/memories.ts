@@ -22,3 +22,8 @@ export async function updateMemorie(id: number, payload: Partial<MemorieType>) {
   const { data } = await api.put(`/memories/${id}`, payload);
   return data;
 }
+
+export async function deleteMemorie(id: number) {
+  const { data } = await api.delete(`/memories/${id}`);
+  return data;
+}

@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { deleteMemorie } from "@/service/memories/memories";
+import { useDeleteMemorie } from "@/service/memories/memories.hook";
 import { formatMemorieDateDetailed } from "@/utils/dates";
-import { ChevronLeft, Loader2Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { ChevronLeft, Loader2Icon, Trash } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 
 type Props = {
   eventDate: Date;
@@ -11,6 +13,15 @@ type Props = {
 
 export function MemoryHeader({ eventDate, isSaving, title }: Props) {
   const router = useRouter();
+  const params = useParams();
+  const { mutate: deleteMemory, isPending } = useDeleteMemorie();
+
+  const memorieId = params.id;
+
+  function handleDelete(id: number) {
+    deleteMemory({ id });
+    router.push("/");
+  }
 
   return (
     <div className="grid h-14 flex-shrink-0 grid-cols-3 items-center border-b px-6 py-3">
@@ -28,6 +39,14 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
       <h1 className="text-center text-sm font-bold text-gray-500">
         {formatMemorieDateDetailed(eventDate)}
       </h1>
+
+      <Button
+        onClick={() => handleDelete(Number(memorieId))}
+        variant="ghost"
+        className="ml-auto w-min cursor-pointer !transition-all"
+      >
+        {isPending ? <Loader2Icon className="animate-spin" /> : <Trash />}
+      </Button>
     </div>
   );
 }

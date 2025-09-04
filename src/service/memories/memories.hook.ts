@@ -6,6 +6,7 @@ import {
   getMemorieById,
   createMemorie,
   updateMemorie,
+  deleteMemorie,
 } from "./memories";
 import { MemorieType } from "@/types/Memorie";
 
@@ -49,6 +50,17 @@ export function useUpdateMemorie() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["memories"] });
       queryClient.invalidateQueries({ queryKey: ["memories", variables.id] });
+    },
+  });
+}
+
+export function useDeleteMemorie() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id }: { id: number }) => deleteMemorie(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["memories"] });
     },
   });
 }
