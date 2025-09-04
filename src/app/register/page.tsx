@@ -20,8 +20,9 @@ import {
 
 import { registerSchema, RegisterSchema } from "./schemaRegister";
 import { AxiosError } from "axios";
-
+import { useState } from "react";
 export default function Register() {
+  const [successMessage, setSuccessMessage] = useState("");
   const { mutate: register, isPending } = useRegisterUser();
 
   const form = useForm<RegisterSchema>({
@@ -47,18 +48,28 @@ export default function Register() {
           message: apiMessage,
         });
       },
+      onSuccess: () => {
+        form.reset();
+        setSuccessMessage("Conta criada com sucesso! Faça login.");
+      },
     });
   }
 
   return (
     <div className="grid h-screen w-full grid-cols-2">
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-full w-full flex-col items-center justify-center">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="m-2 flex w-full max-w-[400px] flex-col gap-3"
           >
             <AuthLogo />
+
+            {successMessage && (
+              <div className="rounded-md border border-green-500 bg-green-100 p-2 text-sm text-green-700">
+                {successMessage}
+              </div>
+            )}
 
             {form.formState.errors.root && (
               <div className="rounded-md border border-red-500 bg-red-100 p-2 text-sm text-red-500">
