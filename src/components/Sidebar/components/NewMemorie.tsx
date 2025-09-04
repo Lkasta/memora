@@ -1,4 +1,4 @@
-import { Loader2Icon, PlusIcon } from "lucide-react";
+import { Loader2Icon, Plus } from "lucide-react";
 import { Button } from "../../ui/button";
 import { getDateWithTimezone } from "@/utils/dates";
 import { format } from "date-fns";
@@ -33,15 +33,13 @@ export function NewMemorie() {
     <Button
       disabled={createMemorie.isPending}
       onClick={handleCreate}
-      className="w-full cursor-pointer bg-violet-500 text-white !transition-all"
+      variant="ghost"
+      className="h-min !cursor-pointer !p-0 !transition-all hover:bg-transparent"
     >
       {createMemorie.isPending ? (
         <Loader2Icon className="animate-spin" />
       ) : (
-        <div className="flex items-center gap-1">
-          <PlusIcon width={16} />
-          <p>Adicionar Memória</p>
-        </div>
+        <Plus />
       )}
     </Button>
   );

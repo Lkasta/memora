@@ -14,7 +14,7 @@ import {
 } from "../ui/accordion";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/store/useAuth"; // Importa o store de auth
-import { LogOut } from "lucide-react";
+import { LogOut, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 
@@ -70,7 +70,10 @@ export function Sidebar() {
       <div className="flex flex-col gap-3 px-6 pt-3">
         <Logo />
       </div>
-      <h1 className="mx-6 mt-3 font-bold text-gray-700">Minhas Memórias</h1>
+      <div className="mt-3 flex w-full items-center justify-between px-6 text-gray-700">
+        <h1 className="font-bold">Minhas Memórias</h1>
+        <NewMemorie />
+      </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         <Accordion
           defaultValue={data?.group.map((memory) => memory.date)}
@@ -112,9 +115,6 @@ export function Sidebar() {
             );
           })}
         </Accordion>
-      </div>
-      <div className="mt-auto flex flex-col gap-3 px-6 py-3">
-        <NewMemorie />
       </div>
       <div className="flex items-center justify-between gap-2 border-t px-6 py-3">
         <div className="flex items-center gap-3">
