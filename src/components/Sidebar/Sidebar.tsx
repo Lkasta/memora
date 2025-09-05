@@ -118,12 +118,12 @@ export function Sidebar() {
                   {memory.memories.map((memorie) => {
                     return (
                       <MemorieItemSidebar
-                        active={memorie.id == memorieId}
                         key={memorie.id}
                         id={memorie.id}
                         title={memorie.title}
                         content={memorie.content}
                         event_date={memorie.event_date}
+                        active={memorie.id == memorieId}
                       />
                     );
                   })}

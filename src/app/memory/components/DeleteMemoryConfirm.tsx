@@ -44,10 +44,10 @@ export function DeleteMemoryConfirm({
             </Button>
           </DialogClose>
           <Button
+            onClick={onConfirm}
             disabled={isPending}
             variant="destructive"
             className="cursor-pointer bg-rose-500 hover:bg-rose-600"
-            onClick={onConfirm}
           >
             {isPending ? <Loader2Icon className="animate-spin" /> : "Excluir"}
           </Button>

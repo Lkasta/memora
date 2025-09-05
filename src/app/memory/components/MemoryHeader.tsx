@@ -48,7 +48,7 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
       </h1>
 
       <DropdownMenu>
-        <DropdownMenuTrigger className="ml-auto w-min">
+        <DropdownMenuTrigger asChild className="ml-auto w-min">
           <Button
             variant="ghost"
             className="ml-auto w-min cursor-pointer !transition-all"
