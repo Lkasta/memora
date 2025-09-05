@@ -18,6 +18,7 @@ import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { MemoGhost } from "../MemoGhost";
 
 interface GroupMemorieProps {
   date: string;
@@ -135,10 +136,16 @@ export function Sidebar() {
       </div>
       <div className="flex items-center justify-between gap-2 border-t px-6 py-3">
         <div className="flex items-center gap-3">
-          <div className="!h-10 !w-10 rounded-full bg-gray-300" />
+          <div className="relative !h-10 !w-10 overflow-hidden rounded-full bg-gray-200">
+            <MemoGhost
+              size="full"
+              className="absolute -bottom-[20%] left-1/2 h-auto w-[80%] -translate-x-1/2"
+              fillColor="fill-gray-300"
+            />
+          </div>
           <div className="select-none">
-            <p className="text-sm">{user?.username}</p>
-            <p className="text-xs">{user?.email}</p>
+            <p className="text-sm font-semibold">{user?.username}</p>
+            <p className="text-muted-foreground text-xs">{user?.email}</p>
           </div>
         </div>
         <Button
