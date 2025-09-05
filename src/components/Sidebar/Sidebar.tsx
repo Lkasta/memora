@@ -14,11 +14,8 @@ import {
 } from "../ui/accordion";
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/store/useAuth";
-import { LogOut } from "lucide-react";
-import { Button } from "../ui/button";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { MemoGhost } from "../MemoGhost";
 import SidebarProfile from "./components/SidebarProfile";
 
 interface GroupMemorieProps {
