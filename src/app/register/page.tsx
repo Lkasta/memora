@@ -2,7 +2,6 @@
 
 import { AuthAside } from "@/components/Auth/AuthAside";
 import { AuthLogo } from "@/components/Auth/AuthLogo";
-import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRegisterUser } from "@/hooks/use-register";
@@ -21,6 +20,7 @@ import {
 import { registerSchema, RegisterSchema } from "./schemaRegister";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import { Loader2Icon } from "lucide-react";
 export default function Register() {
   const [successMessage, setSuccessMessage] = useState("");
   const { mutate: register, isPending } = useRegisterUser();
@@ -163,7 +163,7 @@ export default function Register() {
               disabled={isPending}
               className="cursor-pointer bg-violet-500 !transition-all"
             >
-              {isPending ? <Loader /> : "Criar conta"}
+              {isPending ? <Loader2Icon className="animate-spin" size={16} /> : "Criar conta"}
             </Button>
           </form>
         </Form>
