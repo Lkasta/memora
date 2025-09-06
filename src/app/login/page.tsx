@@ -104,7 +104,11 @@ export default function Login() {
               disabled={isPending}
               className="cursor-pointer bg-violet-500 !transition-all"
             >
-              {true ? <Loader2Icon className="animate-spin" size={16} /> : "Entrar"}
+              {isPending ? (
+                <Loader2Icon className="animate-spin" size={16} />
+              ) : (
+                "Entrar"
+              )}
             </Button>
           </form>
         </Form>
