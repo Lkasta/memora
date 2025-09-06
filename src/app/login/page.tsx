@@ -2,7 +2,6 @@
 
 import { AuthAside } from "@/components/Auth/AuthAside";
 import { AuthLogo } from "@/components/Auth/AuthLogo";
-import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLogin } from "@/hooks/use-login";
@@ -19,6 +18,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { Loader2Icon } from "lucide-react";
 
 export default function Login() {
   const { mutate: login, isPending } = useLogin();
@@ -36,7 +36,7 @@ export default function Login() {
   }
 
   return (
-    <div className="grid h-screen w-full grid-cols-2">
+    <div className="grid h-screen max-h-screen w-full grid-cols-2">
       <div className="flex h-full w-full items-center justify-center">
         <Form {...form}>
           <form
@@ -104,7 +104,7 @@ export default function Login() {
               disabled={isPending}
               className="cursor-pointer bg-violet-500 !transition-all"
             >
-              {isPending ? <Loader /> : "Entrar"}
+              {true ? <Loader2Icon className="animate-spin" size={16} /> : "Entrar"}
             </Button>
           </form>
         </Form>
