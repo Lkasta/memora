@@ -24,8 +24,6 @@ export function MemorieItemSidebar({
 }: Props) {
   const router = useRouter();
 
-  console.log(image);
-
   return (
     <div
       onClick={() => router.push(`/memory/${id}`)}
