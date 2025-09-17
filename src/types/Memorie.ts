@@ -4,4 +4,5 @@ export type MemorieType = {
   content: string;
   user_id: number;
   event_date: Date | string;
+  image: string | null;
 };

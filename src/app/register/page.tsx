@@ -163,7 +163,11 @@ export default function Register() {
               disabled={isPending}
               className="cursor-pointer bg-violet-500 !transition-all"
             >
-              {isPending ? <Loader2Icon className="animate-spin" size={16} /> : "Criar conta"}
+              {isPending ? (
+                <Loader2Icon className="animate-spin" size={16} />
+              ) : (
+                "Criar conta"
+              )}
             </Button>
           </form>
         </Form>

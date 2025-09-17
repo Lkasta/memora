@@ -117,6 +117,7 @@ export function Sidebar() {
                   {memory.memories.map((memorie) => {
                     return (
                       <MemorieItemSidebar
+                        image={memorie.image}
                         key={memorie.id}
                         id={memorie.id}
                         title={memorie.title}
