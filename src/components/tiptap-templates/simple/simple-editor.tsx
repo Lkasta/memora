@@ -75,7 +75,7 @@ import HeaderEditorOptions from "@/app/memory/components/HeaderEditorOptions";
 
 interface SimpleEditorProps {
   title?: string;
-  image: string | null;
+  image?: string | null;
   content?: string;
   onTitleChange?: (title: string) => void;
   onContentChange?: (content: string, title: string) => void;
@@ -337,7 +337,7 @@ export function SimpleEditor({
           )}
         </Toolbar>
 
-        <HeaderEditorOptions image={image} />
+        <HeaderEditorOptions image={image ? image : ""} />
 
         {/* Campo de título separado - sempre H1 */}
         <div className="px-12">
