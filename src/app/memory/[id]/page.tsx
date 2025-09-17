@@ -8,7 +8,7 @@ import { MemoryHeader } from "../components/MemoryHeader";
 import { Loader } from "@/components/Loader";
 import { Memory404 } from "../components/Memory404";
 
-interface MemoriePageProps {
+export interface MemoriePageProps {
   params: Promise<{ id: string }>;
 }
 
@@ -64,15 +64,19 @@ export default function Memory({ params }: MemoriePageProps) {
     return <Loader complement="memória" />;
   }
 
+  console.log(memorie);
+
   return (
     <div className="flex h-screen w-full flex-col text-gray-800">
       <MemoryHeader
+        image={memorie.image}
         eventDate={new Date(memorie.event_date)}
         isSaving={isSaving}
         title={title}
       />
       <div className="w-full flex-1 overflow-y-auto">
         <SimpleEditor
+          image={memorie.image}
           title={title}
           content={content}
           onTitleChange={setTitle}

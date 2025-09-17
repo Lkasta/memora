@@ -71,9 +71,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import HeaderEditorOptions from "@/app/memory/components/HeaderEditorOptions";
 
 interface SimpleEditorProps {
   title?: string;
+  image: string | null;
   content?: string;
   onTitleChange?: (title: string) => void;
   onContentChange?: (content: string, title: string) => void;
@@ -217,6 +219,7 @@ export function TextColorButton() {
 export function SimpleEditor({
   title = "",
   content = "",
+  image,
   onTitleChange,
   onContentChange,
 }: SimpleEditorProps) {
@@ -334,8 +337,10 @@ export function SimpleEditor({
           )}
         </Toolbar>
 
+        <HeaderEditorOptions image={image} />
+
         {/* Campo de título separado - sempre H1 */}
-        <div className="px-12 pt-3">
+        <div className="px-12">
           <input
             type="text"
             value={currentTitle}
@@ -348,11 +353,10 @@ export function SimpleEditor({
             }}
           />
         </div>
-
         <EditorContent
           editor={editor}
           role="presentation"
-          className="px-12 pt-6 w-full"
+          className="w-full px-12 pt-6"
         />
       </EditorContext.Provider>
     </div>
