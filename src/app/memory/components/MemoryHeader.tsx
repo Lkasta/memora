@@ -6,12 +6,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useDeleteMemorie } from "@/service/memories/memories.hook";
+import {
+  useDeleteMemorie,
+  useUpdateMemorie,
+} from "@/service/memories/memories.hook";
 import { formatMemorieDateDetailed } from "@/utils/dates";
 import { ChevronLeft, Loader2Icon, Settings2 } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { DeleteMemoryConfirm } from "./DeleteMemoryConfirm";
-
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import { PopoverContent } from "@/components/tiptap-ui-primitive/popover";
+import { Calendar } from "@/components/ui/calendar";
 type Props = {
   image: string | null;
   eventDate: Date;
@@ -23,6 +28,7 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
   const router = useRouter();
   const params = useParams();
   const { mutate: deleteMemory, isPending } = useDeleteMemorie();
+  const updateMemorie = useUpdateMemorie();
 
   const memorieId = params.id;
 
@@ -33,7 +39,7 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
 
   return (
     <div className="flex flex-col">
-      <div className="grid h-15 flex-shrink-0 grid-cols-3 items-center border-b px-6 py-3">
+      <div className="flex h-15 flex-shrink-0 items-center justify-between border-b px-6 py-3">
         <div className="flex items-center gap-2 text-gray-700">
           <Button
             variant="ghost"
@@ -45,9 +51,31 @@ export function MemoryHeader({ eventDate, isSaving, title }: Props) {
           </Button>
           {isSaving && <Loader2Icon className="animate-spin" size={12} />}
         </div>
-        <h1 className="text-center text-sm font-bold text-gray-500">
-          {formatMemorieDateDetailed(eventDate)}
-        </h1>
+
+        <Popover>
+          <PopoverTrigger className="flex w-full items-center justify-center">
+            <h1 className="cursor-pointer text-center text-sm font-bold text-nowrap text-gray-500 hover:underline">
+              {formatMemorieDateDetailed(eventDate)}
+            </h1>
+          </PopoverTrigger>
+          <PopoverContent>
+            <Calendar
+              className="rounded-lg border shadow-lg"
+              mode="single"
+              selected={eventDate}
+              defaultMonth={eventDate}
+              captionLayout="dropdown"
+              onSelect={(date) => {
+                if (date) {
+                  updateMemorie.mutate({
+                    id: Number(memorieId),
+                    payload: { event_date: date.toISOString() },
+                  });
+                }
+              }}
+            />
+          </PopoverContent>
+        </Popover>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild className="ml-auto w-min">
