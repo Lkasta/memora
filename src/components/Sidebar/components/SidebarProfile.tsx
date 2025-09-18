@@ -14,7 +14,7 @@ export default function SidebarProfile({
   email,
 }: Props) {
   return (
-    <div className="flex items-center justify-between gap-2 border-t px-6 py-3">
+    <div className="flex items-center justify-between gap-2 border-t px-4 py-3">
       <div className="flex items-center gap-3">
         <div className="relative !h-10 !w-10 overflow-hidden rounded-full bg-gray-200">
           <MemoGhost

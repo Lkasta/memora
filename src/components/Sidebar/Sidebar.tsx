@@ -17,6 +17,8 @@ import { useAuth } from "@/store/useAuth";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import SidebarProfile from "./components/SidebarProfile";
+import Link from "next/link";
+import { Cog, LifeBuoy } from "lucide-react";
 
 interface GroupMemorieProps {
   date: string;
@@ -81,13 +83,15 @@ export function Sidebar() {
 
   return (
     <div className="flex h-screen w-full max-w-72 flex-col border-r">
-      <div className="flex flex-col gap-3 px-6 pt-3">
+      <div className="flex flex-col gap-3 px-4 pt-3">
         <Logo />
       </div>
-      <div className="mt-3 flex w-full items-center justify-between px-6 text-gray-700">
+
+      <div className="mt-3 flex w-full items-center justify-between px-4 text-gray-700">
         <h1 className="font-bold">Minhas Memórias</h1>
         <NewMemorie />
       </div>
+
       <div className="min-h-0 flex-1 overflow-y-auto">
         <Accordion
           value={openedAccordions}
@@ -104,7 +108,7 @@ export function Sidebar() {
               >
                 <AccordionTrigger
                   chevronClassName="text-gray-300 !transition-all"
-                  className="group mx-6 cursor-pointer gap-1 pt-3 pb-1.5 hover:no-underline"
+                  className="group mx-4 cursor-pointer gap-1 pt-3 pb-1.5 hover:no-underline"
                 >
                   <span className="text-xs font-bold text-gray-300 capitalize group-hover:underline">
                     {format(date, "MMMM yy", { locale: ptBR })}
@@ -133,6 +137,26 @@ export function Sidebar() {
           })}
         </Accordion>
       </div>
+
+      <div className="flex flex-col gap-2 border-t py-3 px-4">
+        <Link
+          target="_blank"
+          href="https://lkasta.com"
+          className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-gray-700 !transition-colors hover:bg-violet-200 hover:text-violet-600"
+        >
+          <LifeBuoy size={20} />
+          <span className="text-sm font-medium">Projetos</span>
+        </Link>
+
+        <Link
+          href="/settings"
+          className="flex items-center gap-2 rounded-sm bg-violet-100 px-2 py-1.5 text-violet-500 !transition-colors hover:bg-violet-200 hover:text-violet-600"
+        >
+          <Cog size={20} />
+          <span className="text-sm font-medium">Configurações</span>
+        </Link>
+      </div>
+
       {user && (
         <SidebarProfile
           handleLogout={handleLogout}
