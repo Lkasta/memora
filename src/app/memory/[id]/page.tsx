@@ -64,8 +64,6 @@ export default function Memory({ params }: MemoriePageProps) {
     return <Loader complement="memória" />;
   }
 
-  console.log(memorie);
-
   return (
     <div className="flex h-screen w-full flex-col text-gray-800">
       <MemoryHeader

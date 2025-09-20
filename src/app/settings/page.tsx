@@ -13,7 +13,6 @@ import { settingsSchema, SettingsSchema } from "./schemaSettings";
 export default function Settings() {
   const { user } = useAuth();
 
-  console.log(user);
   const { mutate: updateUser, isPending } = useUpadateUser();
 
   const form = useForm<SettingsSchema>({
@@ -28,7 +27,6 @@ export default function Settings() {
 
   const handleSubmit = () => {
     event?.preventDefault();
-    console.log("Values: ", form.getValues());
     if (user) {
       const payload = {
         username: form.getValues("username")?.trim(),

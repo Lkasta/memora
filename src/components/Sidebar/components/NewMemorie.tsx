@@ -25,7 +25,7 @@ export function NewMemorie() {
 
       router.push(`/memory/${data.id}`);
     } catch (err) {
-      console.log("Erro ao criar memória:", err);
+      console.error("Erro ao criar memória:", err);
     }
   }
 
