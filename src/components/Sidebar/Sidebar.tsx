@@ -18,7 +18,8 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import SidebarProfile from "./components/SidebarProfile";
 import Link from "next/link";
-import { Cog, LifeBuoy } from "lucide-react";
+import { LifeBuoy } from "lucide-react";
+import SettingsButton from "./components/SettingsButton";
 
 interface GroupMemorieProps {
   date: string;
@@ -138,7 +139,7 @@ export function Sidebar() {
         </Accordion>
       </div>
 
-      <div className="flex flex-col gap-2 border-t py-3 px-4">
+      <div className="flex flex-col gap-2 border-t px-4 py-3">
         <Link
           target="_blank"
           href="https://lkasta.com"
@@ -148,13 +149,7 @@ export function Sidebar() {
           <span className="text-sm font-medium">Projetos</span>
         </Link>
 
-        <Link
-          href="/settings"
-          className="flex items-center gap-2 rounded-sm bg-violet-100 px-2 py-1.5 text-violet-500 !transition-colors hover:bg-violet-200 hover:text-violet-600"
-        >
-          <Cog size={20} />
-          <span className="text-sm font-medium">Configurações</span>
-        </Link>
+        <SettingsButton />
       </div>
 
       {user && (
