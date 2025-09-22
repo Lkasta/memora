@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useUpadateUser } from "@/service/user/user.hook";
 import { useAuth } from "@/store/useAuth";
@@ -22,6 +28,7 @@ export default function Settings() {
       lastname: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -60,10 +67,11 @@ export default function Settings() {
               control={form.control}
               name="username"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="mb-auto">
                   <FormControl>
                     <Input placeholder="Nome" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -72,7 +80,7 @@ export default function Settings() {
               control={form.control}
               name="lastname"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="mb-auto">
                   <FormControl>
                     <Input placeholder="Sobrenome" {...field} />
                   </FormControl>
@@ -91,6 +99,7 @@ export default function Settings() {
                   <FormControl>
                     <Input type="email" placeholder="E-mail" {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -133,13 +142,11 @@ export default function Settings() {
                 Informe sua senha atual e sua nova senha.
               </span>
             </div>
-            <Input type="password" placeholder="Sua senha atual" />
-
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="mb-auto">
                   <FormControl>
                     <Input
                       type="password"
@@ -147,6 +154,24 @@ export default function Settings() {
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem className="mb-auto">
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Nova senha"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
