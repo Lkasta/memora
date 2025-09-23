@@ -14,7 +14,7 @@ import { useAuth } from "@/store/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { settingsSchema, SettingsSchema } from "./schemaSettings";
-import UserImageInput from "./components/settings";
+import UserImageInput from "./components/UserImageInput";
 
 export default function Settings() {
   const { user } = useAuth();
