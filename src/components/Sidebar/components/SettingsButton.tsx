@@ -9,7 +9,7 @@ export default function SettingsButton() {
   return (
     <Link
       href={route}
-      className={`flex items-center gap-2 rounded-sm px-2 py-1.5 !transition-colors hover:bg-violet-200 hover:text-violet-600 ${pathname.includes(route) && "bg-violet-100 text-violet-500"}`}
+      className={`flex items-center gap-2 rounded-sm px-2 py-1.5 text-gray-700 !transition-colors hover:bg-violet-200 hover:text-violet-600 ${pathname.includes(route) && "bg-violet-100 text-violet-500"}`}
     >
       <Cog size={20} />
       <span className="text-sm font-medium">Configurações</span>
