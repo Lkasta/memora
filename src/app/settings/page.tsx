@@ -12,9 +12,9 @@ import { Input } from "@/components/ui/input";
 import { useUpadateUser } from "@/service/user/user.hook";
 import { useAuth } from "@/store/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { settingsSchema, SettingsSchema } from "./schemaSettings";
+import UserImageInput from "./components/settings";
 
 export default function Settings() {
   const { user } = useAuth();
@@ -118,20 +118,10 @@ export default function Settings() {
                   foto
                 </div>
               </div>
-              <div className="group flex w-full flex-col items-center rounded-lg border px-6 py-4 !transition-colors select-none hover:bg-zinc-50">
-                <div className="w-min rounded-full border-8 border-gray-50 bg-gray-100 p-2 !transition-colors group-hover:border-violet-50 group-hover:bg-violet-100">
-                  <User className="text-zinc-600 !transition-colors group-hover:text-violet-500" />
-                </div>
-                <p>
-                  <span className="font-bold text-violet-500">
-                    Clique para o upload
-                  </span>{" "}
-                  ou arraste e solte aqui
-                </p>
-                <span className="text-sm">
-                  SVG, PNG, JPG or GIF (max. 1200x800px)
-                </span>
-              </div>
+              <UserImageInput
+                disabled={false}
+                onChange={() => console.log("jonas")}
+              />
             </div>
           </div>
 
