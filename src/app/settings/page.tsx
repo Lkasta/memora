@@ -15,11 +15,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { settingsSchema, SettingsSchema } from "./schemaSettings";
 import UserImageInput from "./components/UserImageInput";
+import { useUploadImage } from "@/service/user-image/user-image.hook";
+import { useState } from "react";
 
 export default function Settings() {
   const { user } = useAuth();
+  const [file, setFile] = useState<File | null>(null);
 
   const { mutate: updateUser, isPending } = useUpadateUser();
+  const { mutate: uploadImage, isPending: uploadPending } = useUploadImage();
 
   const form = useForm<SettingsSchema>({
     resolver: zodResolver(settingsSchema),
@@ -32,8 +36,22 @@ export default function Settings() {
     },
   });
 
+  const setImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const f = event.target.files?.[0];
+    if (f) setFile(f);
+
+    const picData = new FormData();
+    picData.append("User_id", String(user?.id));
+    if (file) {
+      picData.append("pic", file);
+    }
+
+    uploadImage(picData);
+  };
+
   const handleSubmit = () => {
     event?.preventDefault();
+
     if (user) {
       const payload = {
         username: form.getValues("username")?.trim(),
@@ -42,13 +60,21 @@ export default function Settings() {
         password: form.getValues("password")?.trim(),
       };
 
+      const picData = new FormData();
+      picData.append("User_id", String(user.id));
+      if (file) {
+        picData.append("image", file);
+      }
+
+      uploadImage(picData);
+      updateUser({ id: user.id, payload });
       updateUser({ id: user.id, payload: payload });
     }
   };
 
   return (
     <div className="m-8 flex w-full flex-col gap-8 !text-gray-700">
-      <h1 className="text-22xl font-medium">Configurações</h1>
+      <h1 className="text-2xl font-medium">Configurações</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -118,10 +144,7 @@ export default function Settings() {
                   foto
                 </div>
               </div>
-              <UserImageInput
-                disabled={false}
-                onChange={() => console.log("jonas")}
-              />
+              <UserImageInput disabled={false} onChange={setImage} />
             </div>
           </div>
 
@@ -176,7 +199,7 @@ export default function Settings() {
               Cancelar
             </Button>
             <Button
-              disabled={isPending}
+              disabled={isPending || uploadPending}
               type="submit"
               className="!cursor-pointer bg-violet-500 text-white !transition-colors hover:bg-violet-600"
             >

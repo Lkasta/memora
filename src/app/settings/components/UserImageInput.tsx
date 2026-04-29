@@ -26,7 +26,7 @@ export default function UserImageInput({ onChange, disabled }: Props) {
         >
           <div className="w-min rounded-full border-8 border-gray-50 bg-gray-100 p-2 !transition-colors group-hover:border-violet-50 group-hover:bg-violet-100">
             <User className="text-zinc-600 !transition-colors group-hover:text-violet-500" />
-          </div>
+          </div> 
           <p>
             <span className="font-bold text-violet-500">
               Clique para o upload
