@@ -67,7 +67,6 @@ export default function Memory({ params }: MemoriePageProps) {
   return (
     <div className="flex h-screen w-full flex-col text-gray-800">
       <MemoryHeader
-        image={memorie.image}
         eventDate={new Date(memorie.event_date)}
         isSaving={isSaving}
         title={title}

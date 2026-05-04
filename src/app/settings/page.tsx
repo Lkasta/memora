@@ -9,21 +9,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useUpadateUser } from "@/service/user/user.hook";
+import { useGetUser, useUpadateUser } from "@/service/user/user.hook";
 import { useAuth } from "@/store/useAuth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { settingsSchema, SettingsSchema } from "./schemaSettings";
 import UserImageInput from "./components/UserImageInput";
-import { useUploadImage } from "@/service/user-image/user-image.hook";
-import { useState } from "react";
+import { useUploadImage, useUpdateUserImage } from "@/service/user-image/user-image.hook";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { MemoGhost } from "@/components/MemoGhost";
 
 export default function Settings() {
   const { user } = useAuth();
   const [file, setFile] = useState<File | null>(null);
 
+  const { data: userData, isLoading } = useGetUser(user?.id);
   const { mutate: updateUser, isPending } = useUpadateUser();
   const { mutate: uploadImage, isPending: uploadPending } = useUploadImage();
+  const { mutate: updateImage, isPending: updatePending } = useUpdateUserImage();
 
   const form = useForm<SettingsSchema>({
     resolver: zodResolver(settingsSchema),
@@ -36,6 +40,18 @@ export default function Settings() {
     },
   });
 
+  useEffect(() => {
+    if (userData) {
+      form.reset({
+        username: userData.name || userData.username || user?.username || "",
+        lastname: userData.lastname || user?.lastname || "",
+        email: userData.email || user?.email || "",
+        password: "",
+        confirmPassword: "",
+      });
+    }
+  }, [userData, form, user]);
+
   const setImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const f = event.target.files?.[0];
     if (f) {
@@ -45,7 +61,11 @@ export default function Settings() {
       picData.append("user_id", String(user?.id));
       picData.append("pic", f);
 
-      uploadImage(picData);
+      if (userData?.image) {
+        updateImage(picData);
+      } else {
+        uploadImage(picData);
+      }
     }
   };
 
@@ -65,7 +85,11 @@ export default function Settings() {
 
       if (file) {
         picData.append("pic", file);
-        uploadImage(picData);
+        if (userData?.image) {
+          updateImage(picData);
+        } else {
+          uploadImage(picData);
+        }
       }
 
       updateUser({ id: user.id, payload });
@@ -140,8 +164,22 @@ export default function Settings() {
             </div>
             <div className="col-span-2 flex gap-6 text-center">
               <div className="">
-                <div className="!h-16 !w-16 rounded-full bg-violet-100">
-                  foto
+                <div className="relative !h-16 !w-16 overflow-hidden rounded-full bg-violet-200">
+                  {userData?.image ? (
+                    <Image
+                      width={100}
+                      height={100}
+                      src={`data:image/jpeg;base64,${userData?.image}`}
+                      alt="thumbnail"
+                      className="top-0 left-0 h-full w-full object-cover !transition-opacity group-hover:opacity-80"
+                    />
+                  ) : (
+                    <MemoGhost
+                      size="full"
+                      className="absolute -bottom-[20%] left-1/2 h-auto w-[80%] -translate-x-1/2"
+                      fillColor="fill-violet-500"
+                    />
+                  )}
                 </div>
               </div>
               <UserImageInput disabled={false} onChange={setImage} />
@@ -199,7 +237,7 @@ export default function Settings() {
               Cancelar
             </Button>
             <Button
-              disabled={isPending || uploadPending}
+              disabled={isPending || uploadPending || updatePending}
               type="submit"
               className="!cursor-pointer bg-violet-500 text-white !transition-colors hover:bg-violet-600"
             >

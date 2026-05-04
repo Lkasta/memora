@@ -18,7 +18,6 @@ import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { PopoverContent } from "@/components/tiptap-ui-primitive/popover";
 import { Calendar } from "@/components/ui/calendar";
 type Props = {
-  image: string | null;
   eventDate: Date;
   isSaving: boolean;
   title: string;
