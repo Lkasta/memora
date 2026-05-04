@@ -4,6 +4,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers/query-provider";
 import { SidebarWrapper } from "@/components/Sidebar/SidebarWrapper";
 import AuthProvider from "@/providers/AuthProvider";
+import { HealthCheckProvider } from "@/providers/HealthCheckProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,12 +24,14 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={`${inter.variable} flex antialiased`}>
-        <AuthProvider>
-          <QueryProvider>
-            <SidebarWrapper />
-            {children}
-          </QueryProvider>
-        </AuthProvider>
+        <HealthCheckProvider>
+          <AuthProvider>
+            <QueryProvider>
+              <SidebarWrapper />
+              {children}
+            </QueryProvider>
+          </AuthProvider>
+        </HealthCheckProvider>
       </body>
     </html>
   );
