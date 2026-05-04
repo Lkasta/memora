@@ -14,10 +14,10 @@ export function useUploadImage() {
   return useMutation({
     mutationFn: uploadUserImage,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["Users"] });
-      if (variables.get("User_id")) {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      if (variables.get("user_id")) {
         queryClient.invalidateQueries({
-          queryKey: ["Users", variables.get("User_id")],
+          queryKey: ["users", variables.get("user_id")],
         });
       }
     },
@@ -30,10 +30,10 @@ export function useUpdateUserImage() {
   return useMutation({
     mutationFn: updateUserImage,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["Users"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
       if (variables.get("User_id")) {
         queryClient.invalidateQueries({
-          queryKey: ["Users", variables.get("User_id")],
+          queryKey: ["users", variables.get("User_id")],
         });
       }
     },
@@ -46,11 +46,11 @@ export function useDeleteUserImage() {
   return useMutation({
     mutationFn: deleteUserImage,
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["Users"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
 
       if (variables.get("User_id")) {
         queryClient.invalidateQueries({
-          queryKey: ["Users", variables.get("User_id")],
+          queryKey: ["users", variables.get("User_id")],
         });
       }
     },

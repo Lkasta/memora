@@ -28,9 +28,9 @@ export default function Settings() {
   const form = useForm<SettingsSchema>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      username: "",
-      lastname: "",
-      email: "",
+      username: user?.username || "",
+      lastname: user?.lastname || "",
+      email: user?.email || "",
       password: "",
       confirmPassword: "",
     },
@@ -38,15 +38,15 @@ export default function Settings() {
 
   const setImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const f = event.target.files?.[0];
-    if (f) setFile(f);
+    if (f) {
+      setFile(f);
 
-    const picData = new FormData();
-    picData.append("User_id", String(user?.id));
-    if (file) {
-      picData.append("pic", file);
+      const picData = new FormData();
+      picData.append("user_id", String(user?.id));
+      picData.append("pic", f);
+
+      uploadImage(picData);
     }
-
-    uploadImage(picData);
   };
 
   const handleSubmit = () => {
@@ -61,14 +61,16 @@ export default function Settings() {
       };
 
       const picData = new FormData();
-      picData.append("User_id", String(user.id));
+      picData.append("user_id", String(user.id));
+
       if (file) {
-        picData.append("image", file);
+        picData.append("pic", file);
+        uploadImage(picData);
       }
 
-      uploadImage(picData);
+      console.log("Jonas", picData);
+
       updateUser({ id: user.id, payload });
-      updateUser({ id: user.id, payload: payload });
     }
   };
 
