@@ -68,8 +68,6 @@ export default function Settings() {
         uploadImage(picData);
       }
 
-      console.log("Jonas", picData);
-
       updateUser({ id: user.id, payload });
     }
   };
