@@ -39,7 +39,7 @@ export function MemorieItemSidebar({
           <Image
             width={100}
             height={100}
-            src={`data:image/jpeg;base64,${image}`}
+            src={image}
             alt="thumbnail"
             className="absolute top-0 left-0 h-full w-full object-cover"
           />

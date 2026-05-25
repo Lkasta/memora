@@ -4,4 +4,5 @@ export type UserType = {
   lastname: string;
   email: string;
   password: string;
+  profile_image_url?: string;
 };

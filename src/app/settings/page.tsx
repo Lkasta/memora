@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,19 +17,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { settingsSchema, SettingsSchema } from "./schemaSettings";
 import UserImageInput from "./components/UserImageInput";
-import { useUploadImage, useUpdateUserImage } from "@/service/user-image/user-image.hook";
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { useUploadThing } from "@/utils/uploadthing";
 import { MemoGhost } from "@/components/MemoGhost";
+import Image from "next/image";
 
 export default function Settings() {
   const { user } = useAuth();
-  const [file, setFile] = useState<File | null>(null);
-
   const { data: userData, isLoading } = useGetUser(user?.id);
   const { mutate: updateUser, isPending } = useUpadateUser();
-  const { mutate: uploadImage, isPending: uploadPending } = useUploadImage();
-  const { mutate: updateImage, isPending: updatePending } = useUpdateUserImage();
+  
+  const { startUpload, isUploading } = useUploadThing("imageUploader");
 
   const form = useForm<SettingsSchema>({
     resolver: zodResolver(settingsSchema),
@@ -40,7 +39,7 @@ export default function Settings() {
     },
   });
 
-  useEffect(() => {
+  useEffect(() => {   
     if (userData) {
       form.reset({
         username: userData.name || userData.username || user?.username || "",
@@ -52,24 +51,24 @@ export default function Settings() {
     }
   }, [userData, form, user]);
 
-  const setImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const f = event.target.files?.[0];
-    if (f) {
-      setFile(f);
-
-      const picData = new FormData();
-      picData.append("user_id", String(user?.id));
-      picData.append("pic", f);
-
-      if (userData?.image) {
-        updateImage(picData);
-      } else {
-        uploadImage(picData);
+    if (f && user) {
+      try {
+        const res = await startUpload([f]);
+        if (res && res.length > 0) {
+          updateUser({
+            id: user.id,
+            payload: { profile_image_url: res[0].url },
+          });
+        }
+      } catch (error) {
+        console.error("Upload falhou", error);
       }
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event?: React.BaseSyntheticEvent) => {
     event?.preventDefault();
 
     if (user) {
@@ -79,18 +78,6 @@ export default function Settings() {
         email: form.getValues("email")?.trim(),
         password: form.getValues("password")?.trim(),
       };
-
-      const picData = new FormData();
-      picData.append("user_id", String(user.id));
-
-      if (file) {
-        picData.append("pic", file);
-        if (userData?.image) {
-          updateImage(picData);
-        } else {
-          uploadImage(picData);
-        }
-      }
 
       updateUser({ id: user.id, payload });
     }
@@ -167,9 +154,9 @@ export default function Settings() {
                 <div className="relative !h-16 !w-16 overflow-hidden rounded-full bg-violet-200">
                   {userData?.image ? (
                     <Image
+                      src={userData.image}
                       width={100}
                       height={100}
-                      src={`data:image/jpeg;base64,${userData?.image}`}
                       alt="thumbnail"
                       className="top-0 left-0 h-full w-full object-cover !transition-opacity group-hover:opacity-80"
                     />
@@ -182,7 +169,7 @@ export default function Settings() {
                   )}
                 </div>
               </div>
-              <UserImageInput disabled={false} onChange={setImage} />
+              <UserImageInput disabled={isUploading} onChange={setImage} />
             </div>
           </div>
 
@@ -237,7 +224,7 @@ export default function Settings() {
               Cancelar
             </Button>
             <Button
-              disabled={isPending || uploadPending || updatePending}
+              disabled={isPending || isUploading}
               type="submit"
               className="!cursor-pointer bg-violet-500 text-white !transition-colors hover:bg-violet-600"
             >

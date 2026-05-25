@@ -1,14 +1,11 @@
 import { Button } from "@/components/ui/button";
 import FileInputButton from "@/components/ui/FileInputButton";
-import {
-  useDeleteImage,
-  useUpdateImage,
-  useUploadImage,
-} from "@/service/memory-image/memory-images.hook";
+import { useUpdateMemorie } from "@/service/memories/memories.hook";
 import { useAuth } from "@/store/useAuth";
 import { SquarePen, Image as Imageicon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
+import { useUploadThing } from "@/utils/uploadthing";
 
 export default function HeaderEditorOptions({
   image,
@@ -17,42 +14,37 @@ export default function HeaderEditorOptions({
 }) {
   const { id: memorieId } = useParams();
   const { user } = useAuth();
-  const { mutate: uploadImage, isPending } = useUploadImage();
-  const { mutate: updateImage, isPending: updateImageisPending } =
-    useUpdateImage();
-  const { mutate: deleteImage, isPending: deleteImagePending } =
-    useDeleteImage();
 
-  const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const { mutate: updateMemorie, isPending: updateMemoriePending } =
+    useUpdateMemorie();
+  const { startUpload, isUploading } = useUploadThing("imageUploader");
+
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file || !memorieId) return;
 
-    if (image) {
-      const formData = new FormData();
-      formData.append("pic", file);
-      formData.append("memorie_id", String(memorieId));
-      formData.append("user_id", String(user?.id));
-
-      updateImage(formData);
-    } else {
-      const formData = new FormData();
-      formData.append("pic", file);
-      formData.append("memorie_id", String(memorieId));
-      formData.append("user_id", String(user?.id));
-
-      uploadImage(formData);
+    try {
+      const res = await startUpload([file]);
+      if (res && res.length > 0) {
+        updateMemorie({
+          id: Number(memorieId),
+          payload: { image_url: res[0].url },
+        });
+      }
+    } catch (error) {
+      console.error("Upload failed", error);
     }
   };
 
   const handleDelete = () => {
-    if (!memorieId || !user?.id) return;
+    if (!memorieId) return;
 
-    const formData = new FormData();
-    formData.append("memorie_id", String(memorieId));
-    formData.append("user_id", String(user.id));
-
-    deleteImage(formData);
+    updateMemorie({
+      id: Number(memorieId),
+      payload: { image_url: undefined },
+    });
   };
+
   return (
     <div className="">
       {image ? (
@@ -61,14 +53,14 @@ export default function HeaderEditorOptions({
             <FileInputButton
               icon={SquarePen}
               onChange={handleUpload}
-              disabled={updateImageisPending}
+              disabled={isUploading || updateMemoriePending}
               textButton="Atualizar Capa"
             />
             <Button
               className="h-min cursor-pointer space-x-1 bg-gray-100 px-2 py-1 text-xs text-gray-700 shadow-none transition-colors hover:bg-gray-300"
               size="sm"
               onClick={handleDelete}
-              disabled={deleteImagePending}
+              disabled={isUploading || updateMemoriePending}
             >
               <span className="flex items-center gap-1">
                 <Trash2 className="!h-[13px] !w-[13px]" size={10} />
@@ -77,9 +69,9 @@ export default function HeaderEditorOptions({
             </Button>
           </div>
           <Image
+            src={image}
             width={1000}
             height={1000}
-            src={`data:image/jpeg;base64,${image}`}
             alt="thumbnail"
             className="top-0 left-0 h-full w-full object-cover !transition-opacity group-hover:opacity-80"
           />
@@ -89,7 +81,7 @@ export default function HeaderEditorOptions({
           <FileInputButton
             icon={Imageicon}
             onChange={handleUpload}
-            disabled={isPending}
+            disabled={isUploading || updateMemoriePending}
             textButton="Adicionar Capa"
           />
         </div>
