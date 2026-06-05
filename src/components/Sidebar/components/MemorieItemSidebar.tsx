@@ -31,7 +31,7 @@ export function MemorieItemSidebar({
     >
       <div
         className={clsx(
-          "relative !h-10 !w-10 overflow-hidden rounded-lg",
+          "relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-lg",
           active ? "bg-violet-200" : "bg-gray-200",
         )}
       >
@@ -46,7 +46,7 @@ export function MemorieItemSidebar({
         ) : (
           <MemoGhost
             size="full"
-            className="absolute -bottom-[20%] left-1/2 h-auto w-[80%] -translate-x-1/2"
+            className="absolute -bottom-[20%] w-[80%]"
             fillColor={active ? "fill-violet-300" : "fill-gray-300"}
           />
         )}

@@ -16,10 +16,10 @@ export default function SidebarProfile({
   return (
     <div className="flex items-center justify-between gap-2 border-t px-4 py-3">
       <div className="flex items-center gap-3">
-        <div className="relative !h-10 !w-10 overflow-hidden rounded-full bg-gray-200">
+        <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-200">
           <MemoGhost
             size="full"
-            className="absolute -bottom-[20%] left-1/2 h-auto w-[80%] -translate-x-1/2"
+            className="absolute -bottom-[20%] h-auto w-[80%]"
             fillColor="fill-gray-300"
           />
         </div>
