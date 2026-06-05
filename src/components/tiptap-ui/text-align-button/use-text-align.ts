@@ -81,7 +81,7 @@ export function canSetTextAlign(
   )
     return false
 
-  return editor.can().setTextAlign(align)
+  return (editor.can() as unknown as { setTextAlign: (align: TextAlign) => boolean }).setTextAlign(align)
 }
 
 export function hasSetTextAlign(

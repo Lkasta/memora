@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +23,7 @@ import Image from "next/image";
 
 export default function Settings() {
   const { user } = useAuth();
-  const { data: userData, isLoading } = useGetUser(user?.id);
+  const { data: userData } = useGetUser(user?.id);
   const { mutate: updateUser, isPending } = useUpadateUser();
   
   const { startUpload, isUploading } = useUploadThing("imageUploader");
@@ -68,15 +68,13 @@ export default function Settings() {
     }
   };
 
-  const handleSubmit = (event?: React.BaseSyntheticEvent) => {
-    event?.preventDefault();
-
+  const handleSubmit = (data: SettingsSchema) => {
     if (user) {
       const payload = {
-        username: form.getValues("username")?.trim(),
-        lastname: form.getValues("lastname")?.trim(),
-        email: form.getValues("email")?.trim(),
-        password: form.getValues("password")?.trim(),
+        username: data.username?.trim(),
+        lastname: data.lastname?.trim(),
+        email: data.email?.trim(),
+        password: data.password?.trim(),
       };
 
       updateUser({ id: user.id, payload });

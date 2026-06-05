@@ -14,7 +14,6 @@ const HealthCheckContext = createContext<HealthCheckContextType | undefined>(
 
 export function HealthCheckProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false);
-  const [errorCount, setErrorCount] = useState(0);
 
   useEffect(() => {
     let isMounted = true;
@@ -30,7 +29,6 @@ export function HealthCheckProvider({ children }: { children: ReactNode }) {
       } catch (error) {
         console.warn("Server is starting...", error);
         if (isMounted) {
-          setErrorCount((prev) => prev + 1);
           // Tenta novamente em 3 segundos
           setTimeout(checkHealth, 3000);
         }

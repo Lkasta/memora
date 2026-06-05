@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import FileInputButton from "@/components/ui/FileInputButton";
 import { useUpdateMemorie } from "@/service/memories/memories.hook";
-import { useAuth } from "@/store/useAuth";
 import { SquarePen, Image as Imageicon, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -13,7 +12,6 @@ export default function HeaderEditorOptions({
   image: string | null;
 }) {
   const { id: memorieId } = useParams();
-  const { user } = useAuth();
 
   const { mutate: updateMemorie, isPending: updateMemoriePending } =
     useUpdateMemorie();

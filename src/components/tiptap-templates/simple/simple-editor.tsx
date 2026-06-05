@@ -7,7 +7,6 @@ import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Image } from "@tiptap/extension-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
-import { TextAlign } from "@tiptap/extension-text-align";
 import { Typography } from "@tiptap/extension-typography";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Subscript } from "@tiptap/extension-subscript";
@@ -50,7 +49,6 @@ import {
   LinkButton,
 } from "@/components/tiptap-ui/link-popover";
 import { MarkButton } from "@/components/tiptap-ui/mark-button";
-import { TextAlignButton } from "@/components/tiptap-ui/text-align-button";
 
 // --- Icons ---
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
