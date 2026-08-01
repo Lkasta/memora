@@ -4,14 +4,16 @@ import { Loader2Icon } from "lucide-react";
 import { MemoGhost } from "./MemoGhost";
 
 export function ServerWakingUp() {
-
   return (
     <div className="bg-background text-foreground animate-in fade-in fixed inset-0 z-[9999] flex flex-col items-center justify-center duration-500">
       <div className="relative mb-8">
         {/* Camadas de brilho para efeito premium */}
-        <div className="bg-primary/10 absolute -inset-4 animate-pulse rounded-full blur-xl" />
+        <div className="bg-primary/10 absolute -inset-4 animate-pulse rounded-full blur-xl!" />
         <div className="bg-card border-border shadow-primary/5 relative flex h-20 w-20 items-center justify-center rounded-2xl border shadow-2xl">
-          <MemoGhost className="animate-bounce-slow tex h-10 w-10" fillColor="fill-violet-500" />
+          <MemoGhost
+            className="animate-bounce-slow tex h-10 w-10"
+            fillColor="fill-violet-500"
+          />
         </div>
       </div>
 

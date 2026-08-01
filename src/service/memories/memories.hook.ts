@@ -39,7 +39,7 @@ export function useCreateMemorie() {
 export function useUpdateMemorie() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation({ 
     mutationFn: ({
       id,
       payload,
