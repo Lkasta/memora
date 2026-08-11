@@ -20,6 +20,7 @@ import UserImageInput from "./components/UserImageInput";
 import { useUploadThing } from "@/utils/uploadthing";
 import { MemoGhost } from "@/components/MemoGhost";
 import Image from "next/image";
+import { UserType } from "@/types/User";
 
 export default function Settings() {
   const { user } = useAuth();
@@ -39,10 +40,10 @@ export default function Settings() {
     },
   });
 
-  useEffect(() => {   
+  useEffect(() => {
     if (userData) {
       form.reset({
-        username: userData.name || userData.username || user?.username || "",
+        username: userData.username || user?.username || "",
         lastname: userData.lastname || user?.lastname || "",
         email: userData.email || user?.email || "",
         password: "",
@@ -69,16 +70,23 @@ export default function Settings() {
   };
 
   const handleSubmit = (data: SettingsSchema) => {
-    if (user) {
-      const payload = {
-        username: data.username?.trim(),
-        lastname: data.lastname?.trim(),
-        email: data.email?.trim(),
-        password: data.password?.trim(),
-      };
+    if (!user) return;
 
-      updateUser({ id: user.id, payload });
+    const payload: Partial<UserType> = {
+      username: data.username?.trim(),
+      lastname: data.lastname?.trim(),
+      email: data.email?.trim(),
+    };
+
+    // Only send a password when the user actually typed a new one - the field
+    // always starts empty, so including it unconditionally would overwrite
+    // the current password with an empty string on every save.
+    const newPassword = data.password?.trim();
+    if (newPassword) {
+      payload.password = newPassword;
     }
+
+    updateUser({ id: user.id, payload });
   };
 
   return (
@@ -150,9 +158,9 @@ export default function Settings() {
             <div className="col-span-2 flex gap-6 text-center">
               <div className="">
                 <div className="relative !h-16 !w-16 overflow-hidden rounded-full bg-violet-200">
-                  {userData?.image ? (
+                  {userData?.profile_image_url ? (
                     <Image
-                      src={userData.image}
+                      src={userData.profile_image_url}
                       width={100}
                       height={100}
                       alt="thumbnail"

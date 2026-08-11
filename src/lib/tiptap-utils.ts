@@ -1,6 +1,7 @@
 import type { Node as TiptapNode } from "@tiptap/pm/model"
 import { NodeSelection, Selection, TextSelection } from "@tiptap/pm/state"
 import type { Editor } from "@tiptap/react"
+import { uploadFiles } from "@/utils/uploadthing"
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
@@ -280,7 +281,8 @@ export function isNodeTypeSelected(
 }
 
 /**
- * Handles image upload with progress tracking and abort capability
+ * Handles image upload with progress tracking and abort capability.
+ * Uploads through UploadThing, the same provider used for cover and profile images.
  * @param file The file to upload
  * @param onProgress Optional callback for tracking upload progress
  * @param abortSignal Optional AbortSignal for cancelling the upload
@@ -302,17 +304,17 @@ export const handleImageUpload = async (
     )
   }
 
-  // For demo/testing: Simulate upload progress. In production, replace the following code
-  // with your own upload implementation.
-  for (let progress = 0; progress <= 100; progress += 10) {
-    if (abortSignal?.aborted) {
-      throw new Error("Upload cancelled")
-    }
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    onProgress?.({ progress })
+  const [uploaded] = await uploadFiles("imageUploader", {
+    files: [file],
+    signal: abortSignal,
+    onUploadProgress: ({ progress }) => onProgress?.({ progress }),
+  })
+
+  if (!uploaded?.url) {
+    throw new Error("Upload failed: no URL returned")
   }
 
-  return "/images/tiptap-ui-placeholder-image.jpg"
+  return uploaded.url
 }
 
 type ProtocolOptions = {

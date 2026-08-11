@@ -15,8 +15,9 @@ import {
 import { ptBR } from "date-fns/locale";
 import { useAuth } from "@/store/useAuth";
 import { useParams, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SidebarProfile from "./components/SidebarProfile";
+import { useGetUser } from "@/service/user/user.hook";
 import Link from "next/link";
 import { LifeBuoy } from "lucide-react";
 import SettingsButton from "./components/SettingsButton";
@@ -32,37 +33,44 @@ interface GroupMemoriesProps {
 
 export function Sidebar() {
   const { data: memories, isLoading } = useMemories();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  // The login response (and so the persisted auth user) carries no avatar, and
+  // it would go stale the moment Settings saves a new one - read the profile
+  // from the API instead, which Settings already invalidates on save.
+  const { data: profile } = useGetUser(user?.id);
   const params = useParams();
   const router = useRouter();
-  const auth = useAuth();
 
   const memorieId = Number(params.id);
 
   const [openedAccordions, setOpenedAccordions] = useState<string[]>([]);
 
   function handleLogout() {
-    auth.logout();
+    logout();
     router.push("/login");
   }
 
-  const data = memories?.reduce(
-    (acc, memorie) => {
-      const dateKey = format(memorie.event_date, "yyyy-MM");
-      const dateItem = acc.group.find((m) => m.date === dateKey);
+  const data = useMemo(
+    () =>
+      memories?.reduce(
+        (acc, memorie) => {
+          const dateKey = format(memorie.event_date, "yyyy-MM");
+          const dateItem = acc.group.find((m) => m.date === dateKey);
 
-      if (dateItem) {
-        dateItem.memories.push(memorie);
-      } else {
-        acc.group.push({
-          date: dateKey,
-          memories: [memorie],
-        });
-      }
+          if (dateItem) {
+            dateItem.memories.push(memorie);
+          } else {
+            acc.group.push({
+              date: dateKey,
+              memories: [memorie],
+            });
+          }
 
-      return acc;
-    },
-    { group: [] } as GroupMemoriesProps,
+          return acc;
+        },
+        { group: [] } as GroupMemoriesProps,
+      ),
+    [memories],
   );
 
   useEffect(() => {
@@ -155,8 +163,9 @@ export function Sidebar() {
       {user && (
         <SidebarProfile
           handleLogout={handleLogout}
-          username={user.username}
-          email={user.email}
+          username={profile?.username || user.username}
+          email={profile?.email || user.email}
+          image={profile?.profile_image_url}
         />
       )}
     </div>

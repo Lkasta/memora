@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { useAuth } from "@/store/useAuth";
 import { useRouter } from "next/navigation";
+import { UserType } from "@/types/User";
 
 interface LoginPayload {
   email: string;
@@ -10,11 +11,7 @@ interface LoginPayload {
 
 interface LoginResponse {
   token: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-  };
+  user: UserType;
 }
 
 export function useLogin() {

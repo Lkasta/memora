@@ -1,4 +1,5 @@
 import axios from "axios";
+import { publicRoutes } from "@/utils/routes";
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
@@ -18,9 +19,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // On public routes (login/register) a 401 just means "wrong credentials"
+    // for that request - not an expired session - so don't force a redirect.
     if (
       error.response?.status === 401 &&
-      window.location.pathname !== "/register"
+      !publicRoutes.includes(window.location.pathname)
     ) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");

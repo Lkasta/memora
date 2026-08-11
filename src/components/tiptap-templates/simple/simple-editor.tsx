@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
+import type { Editor } from "@tiptap/react";
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
 
 // --- Tiptap Core Extensions ---
 import { StarterKit } from "@tiptap/starter-kit";
-import { Image } from "@tiptap/extension-image";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { Typography } from "@tiptap/extension-typography";
 import { Highlight } from "@tiptap/extension-highlight";
@@ -26,6 +26,7 @@ import {
 
 // --- Tiptap Node ---
 import { ImageUploadNode } from "@/components/tiptap-node/image-upload-node/image-upload-node-extension";
+import { ResizableImage } from "@/components/tiptap-node/image-node/image-node-extension";
 import { HorizontalRule } from "@/components/tiptap-node/horizontal-rule-node/horizontal-rule-node-extension";
 import "@/components/tiptap-node/blockquote-node/blockquote-node.scss";
 import "@/components/tiptap-node/code-block-node/code-block-node.scss";
@@ -49,11 +50,14 @@ import {
   LinkButton,
 } from "@/components/tiptap-ui/link-popover";
 import { MarkButton } from "@/components/tiptap-ui/mark-button";
+import { ImageUploadButton } from "@/components/tiptap-ui/image-upload-button";
+import { ImageEditMenu } from "@/components/tiptap-ui/image-edit-menu";
 
 // --- Icons ---
 import { ArrowLeftIcon } from "@/components/tiptap-icons/arrow-left-icon";
 import { HighlighterIcon } from "@/components/tiptap-icons/highlighter-icon";
 import { LinkIcon } from "@/components/tiptap-icons/link-icon";
+import { ChevronDown } from "lucide-react";
 
 // --- Hooks ---
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -109,6 +113,7 @@ const MainToolbarContent = ({
         )}
         {!isMobile ? <LinkPopover /> : <LinkButton onClick={onLinkClick} />}
         <TextColorButton />
+        <ImageUploadButton />
         {/* 
         <TextAlignButton align="left" />
         <TextAlignButton align="center" />
@@ -166,52 +171,108 @@ const colors = [
   { hex: "#a1a1aa", name: "Cinza" },
 ];
 
+const DEFAULT_TEXT_COLOR = "#000000";
+
+/**
+ * Word-style text colour control: an "A" sitting on a bar of the current
+ * colour. Clicking the "A" applies that colour straight away; the chevron
+ * opens the palette to pick a different one. Like Word, the bar remembers the
+ * last colour chosen rather than tracking whatever is under the cursor.
+ */
 export function TextColorButton() {
   const { editor } = React.useContext(EditorContext);
-  const [selected, setSelected] = React.useState<string | null>(null);
+  const [selected, setSelected] = React.useState<string>(DEFAULT_TEXT_COLOR);
+  const [open, setOpen] = React.useState(false);
 
   const handleSelect = (color: string) => {
     setSelected(color);
+    setOpen(false);
     editor?.chain().focus().setColor(color).run();
   };
 
   const handleUnset = () => {
-    setSelected(null);
+    setSelected(DEFAULT_TEXT_COLOR);
+    setOpen(false);
     editor?.chain().focus().unsetColor().run();
   };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="h-6 w-6 rounded-full p-0"
-          style={{ backgroundColor: selected ?? "white" }}
+    // h-8 matches .tiptap-button so the control lines up with the rest of the
+    // toolbar instead of stretching it.
+    <div className="flex h-8 items-center">
+      <button
+        type="button"
+        title={`Cor do texto (${selected})`}
+        aria-label="Aplicar cor do texto"
+        onClick={() => editor?.chain().focus().setColor(selected).run()}
+        className="flex h-8 w-6 cursor-pointer flex-col items-center justify-center gap-[3px] rounded-l-sm transition-colors hover:bg-gray-100"
+      >
+        <span className="text-xs leading-none font-semibold text-gray-700">
+          A
+        </span>
+        <span
+          className="h-[3px] w-3.5 rounded-[1px]"
+          style={{ backgroundColor: selected }}
         />
-      </PopoverTrigger>
-      <PopoverContent className="flex h-fit w-fit flex-wrap gap-2 p-2">
-        {colors.map((color) => (
+      </button>
+
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
           <button
-            key={color.hex}
-            onClick={() => handleSelect(color.hex)}
-            title={color.name}
-            className={cn(
-              "h-5 w-5 rounded-full border transition hover:scale-110",
-              selected === color.hex && "ring-2 ring-gray-200 ring-offset-1",
-            )}
-            style={{ backgroundColor: color.hex }}
-          />
-        ))}
-        <button
-          onClick={handleUnset}
-          title="Remover cor"
-          className="flex h-5 w-5 items-center justify-center rounded-full border text-xs"
-        >
-          ×
-        </button>
-      </PopoverContent>
-    </Popover>
+            type="button"
+            title="Escolher cor"
+            aria-label="Escolher cor do texto"
+            className="flex h-8 w-3.5 cursor-pointer items-center justify-center rounded-r-sm text-gray-500 transition-colors hover:bg-gray-100"
+          >
+            <ChevronDown size={10} />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="flex w-fit flex-col gap-2 p-2">
+          <div className="grid grid-cols-5 gap-2">
+            {colors.map((color) => (
+              <button
+                key={color.hex}
+                type="button"
+                onClick={() => handleSelect(color.hex)}
+                title={color.name}
+                className={cn(
+                  "h-5 w-5 cursor-pointer rounded-full border transition hover:scale-110",
+                  selected === color.hex && "ring-2 ring-gray-300 ring-offset-1",
+                )}
+                style={{ backgroundColor: color.hex }}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleUnset}
+            className="cursor-pointer rounded-sm border px-2 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-100"
+          >
+            Remover cor
+          </button>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
+}
+
+/**
+ * The editor's HTML, minus the dropzones of uploads still in flight.
+ *
+ * An `imageUpload` node serializes to `<div data-type="image-upload">`, and
+ * the page autosaves on a timer - without this, an upload slower than the
+ * debounce would persist an empty placeholder into the memory. The node is
+ * replaced by a real `<img>` once the upload resolves, which saves normally.
+ */
+function serializeContent(editor: Editor): string {
+  const html = editor.getHTML();
+  if (!html.includes('data-type="image-upload"')) return html;
+
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.body
+    .querySelectorAll('[data-type="image-upload"]')
+    .forEach((node) => node.remove());
+  return doc.body.innerHTML;
 }
 
 export function SimpleEditor({
@@ -261,7 +322,7 @@ export function SimpleEditor({
       Highlight.configure({ multicolor: true }),
       TextStyle,
       Color,
-      Image,
+      ResizableImage,
       Typography,
       Superscript,
       Subscript,
@@ -277,8 +338,7 @@ export function SimpleEditor({
     content: content || "",
     onUpdate: ({ editor }) => {
       if (onContentChange) {
-        const html = editor.getHTML();
-        onContentChange(html, currentTitle);
+        onContentChange(serializeContent(editor), currentTitle);
       }
     },
   });
@@ -291,14 +351,16 @@ export function SimpleEditor({
       onTitleChange(newTitle);
     }
     if (onContentChange) {
-      const html = editor?.getHTML() || "";
-      onContentChange(html, newTitle);
+      onContentChange(editor ? serializeContent(editor) : "", newTitle);
     }
   };
 
-  // Sincroniza o conteúdo quando a prop content mudar
+  // Sincroniza o conteúdo quando a prop content mudar. A comparação usa o
+  // mesmo serializador do onUpdate: comparar com getHTML() cru faria o editor
+  // se resetar (matando o upload em andamento) sempre que a pessoa digitasse
+  // com um placeholder de upload no documento.
   React.useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
+    if (editor && content !== serializeContent(editor)) {
       editor.commands.setContent(content);
     }
   }, [content, editor]);
@@ -335,7 +397,7 @@ export function SimpleEditor({
           )}
         </Toolbar>
 
-        <HeaderEditorOptions image={image ? image : ""} />
+        <HeaderEditorOptions image={image ?? null} />
 
         {/* Campo de título separado - sempre H1 */}
         <div className="px-12">
@@ -356,6 +418,8 @@ export function SimpleEditor({
           role="presentation"
           className="w-full px-12 pt-6"
         />
+
+        <ImageEditMenu editor={editor} />
       </EditorContext.Provider>
     </div>
   );

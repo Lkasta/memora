@@ -39,7 +39,9 @@ export default function HeaderEditorOptions({
 
     updateMemorie({
       id: Number(memorieId),
-      payload: { image_url: undefined },
+      // Explicit null, not undefined: axios drops undefined keys when
+      // serializing the body, so the backend would never see the change.
+      payload: { image_url: null },
     });
   };
 

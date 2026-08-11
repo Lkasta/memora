@@ -8,6 +8,7 @@ import { useLogin } from "@/hooks/use-login";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
 import { LoginSchema, loginSchema } from "./schemaLogin";
 
 import {
@@ -32,7 +33,19 @@ export default function Login() {
   });
 
   function onSubmit(values: LoginSchema) {
-    login(values);
+    login(values, {
+      onError: (error: unknown) => {
+        const axiosError = error as AxiosError<{ error: string }>;
+
+        const apiMessage =
+          axiosError.response?.data?.error || "E-mail ou senha inválidos";
+
+        form.setError("root", {
+          type: "manual",
+          message: apiMessage,
+        });
+      },
+    });
   }
 
   return (
@@ -44,6 +57,12 @@ export default function Login() {
             className="m-2 flex w-full max-w-[400px] flex-col gap-3"
           >
             <AuthLogo />
+
+            {form.formState.errors.root && (
+              <div className="rounded-md border border-red-500 bg-red-100 p-2 text-sm text-red-500">
+                {form.formState.errors.root.message}
+              </div>
+            )}
 
             <div className="flex flex-col gap-3">
               <FormField

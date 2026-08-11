@@ -1,27 +1,40 @@
 import { MemoGhost } from "@/components/MemoGhost";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
+import Image from "next/image";
 
 type Props = {
   handleLogout: () => void;
   username: string;
   email: string;
+  image?: string | null;
 };
 
 export default function SidebarProfile({
   handleLogout,
   username,
   email,
+  image,
 }: Props) {
   return (
     <div className="flex items-center justify-between gap-2 border-t px-4 py-3">
       <div className="flex items-center gap-3">
-        <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gray-200">
-          <MemoGhost
-            size="full"
-            className="absolute -bottom-[20%] h-auto w-[80%]"
-            fillColor="fill-gray-300"
-          />
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200">
+          {image ? (
+            <Image
+              src={image}
+              width={80}
+              height={80}
+              alt={username || "Foto de perfil"}
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <MemoGhost
+              size="full"
+              className="absolute -bottom-[20%] h-auto w-[80%]"
+              fillColor="fill-gray-300"
+            />
+          )}
         </div>
         <div className="select-none">
           <p className="text-sm font-semibold">{username || "Username"}</p>

@@ -4,12 +4,16 @@ import { getDateWithTimezone } from "@/utils/dates";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCreateMemorie } from "@/service/memories/memories.hook";
+import { useAuth } from "@/store/useAuth";
 
 export function NewMemorie() {
   const createMemorie = useCreateMemorie();
   const router = useRouter();
+  const { user } = useAuth();
 
   async function handleCreate() {
+    if (!user) return;
+
     try {
       const now = format(
         getDateWithTimezone(new Date()),
@@ -20,7 +24,7 @@ export function NewMemorie() {
         title: "Minha memória",
         content: "",
         event_date: now,
-        user_id: 1,
+        user_id: user.id,
       });
 
       router.push(`/memory/${data.id}`);
@@ -31,7 +35,7 @@ export function NewMemorie() {
 
   return (
     <Button
-      disabled={createMemorie.isPending}
+      disabled={createMemorie.isPending || !user}
       onClick={handleCreate}
       variant="ghost"
       className="h-min !cursor-pointer !p-0 !transition-all hover:bg-transparent"

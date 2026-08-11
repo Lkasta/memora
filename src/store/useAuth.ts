@@ -1,18 +1,12 @@
 import { create } from "zustand";
 import jwt from "jsonwebtoken";
-
-interface User {
-  id: number;
-  username: string;
-  lastname?: string;
-  email: string;
-}
+import { UserType } from "@/types/User";
 
 interface AuthState {
-  user: User | null;
+  user: UserType | null;
   token: string | null;
   isLoading: boolean;
-  login: (user: User, token: string) => void;
+  login: (user: UserType, token: string) => void;
   logout: () => void;
   initializeAuth: () => void;
   isTokenValid: () => boolean;

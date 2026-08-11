@@ -17,21 +17,25 @@ export function HealthCheckProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let isMounted = true;
+    let retryTimeout: ReturnType<typeof setTimeout> | undefined;
+
+    const scheduleRetry = () => {
+      if (!isMounted) return;
+      // Tenta novamente em 3 segundos
+      retryTimeout = setTimeout(checkHealth, 3000);
+    };
 
     const checkHealth = async () => {
       try {
         const response = await api.get("/health");
-        if (response.data?.status === "ok" && isMounted) {
-          setIsReady(true);
+        if (response.data?.status === "ok") {
+          if (isMounted) setIsReady(true);
         } else {
-          setTimeout(checkHealth, 3000);
+          scheduleRetry();
         }
       } catch (error) {
         console.warn("Server is starting...", error);
-        if (isMounted) {
-          // Tenta novamente em 3 segundos
-          setTimeout(checkHealth, 3000);
-        }
+        scheduleRetry();
       }
     };
 
@@ -39,6 +43,7 @@ export function HealthCheckProvider({ children }: { children: ReactNode }) {
 
     return () => {
       isMounted = false;
+      clearTimeout(retryTimeout);
     };
   }, []);
 
